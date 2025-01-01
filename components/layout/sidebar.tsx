@@ -4,42 +4,62 @@ import {
   LayoutDashboard,
   ShoppingCart,
   Package,
-  FolderArchive,
-  Image as ImageIcon,
-  Users,
-  FileText,
-  Menu,
-  BarChart2,
-  PlusCircle,
   Layers,
   Cloud,
+  Users,
+  BarChart2,
+  Menu,
+  ChevronDown,
+  ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 
 const sidebarLinks = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { href: "/sales/add", icon: PlusCircle, label: "Add Sale" },
-  { href: "/sales", icon: ShoppingCart, label: "Manage Sales" },
-  { href: "/products/add", icon: Package, label: "Add Product" },
-  { href: "/products", icon: Package, label: "Manage Products" },
+  {
+    label: "Products",
+    icon: Package,
+    children: [
+      { href: "/products/add", label: "Add Product" },
+      { href: "/products", label: "Manage Products" },
+    ],
+  },
+  {
+    label: "User Management",
+    icon: Users,
+    children: [
+      { href: "/users/manage", label: "Manage Users" },
+      { href: "/users/groups", label: "Manage Groups" },
+    ],
+  },
+  {
+    label: "Sales",
+    icon: ShoppingCart,
+    children: [
+      { href: "/sales/manage", label: "Manage Sales" },
+      { href: "/sales/add", label: "Add Sales" },
+    ],
+  },
   { href: "/categories", icon: Layers, label: "Categories" },
   { href: "/media", icon: Cloud, label: "Media Library" },
-  { href: "/users", icon: Users, label: "User Management" },
   { href: "/reports", icon: BarChart2, label: "Reports" },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
-  const [isCollapsed, setIsCollapsed] = useState(true); // Default collapsed
-  const [isMobile, setIsMobile] = useState(false); // Track if the device is mobile
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>(
+    {}
+  );
 
   useEffect(() => {
-    // Check if the device is mobile
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    handleResize(); // Initial check
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -49,15 +69,19 @@ export function Sidebar() {
   };
 
   const handleLinkClick = () => {
-    // Collapse the sidebar only on mobile
-    if (isMobile) {
-      setIsCollapsed(true);
-    }
+    if (isMobile) setIsCollapsed(true);
+  };
+
+  const toggleDropdown = (label: string) => {
+    setExpandedItems((prev) => ({
+      ...prev,
+      [label]: !prev[label],
+    }));
   };
 
   return (
     <div
-      className={`h-full flex flex-col border-r bg-card text-muted-foreground transition-all duration-300 ${
+      className={`h-screen flex flex-col border-r bg-card text-muted-foreground transition-all duration-300 ${
         isCollapsed ? "w-[60px]" : "w-[240px]"
       }`}
     >
@@ -71,30 +95,76 @@ export function Sidebar() {
         >
           <Menu className="h-5 w-5" />
         </Button>
-        {/* Header text visibility */}
         {!isCollapsed && <span className="text-lg font-bold">Admin Panel</span>}
       </div>
 
       {/* Navigation Links */}
       <nav className="flex-1 space-y-1 p-2">
-        {sidebarLinks.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            onClick={handleLinkClick}
-            className={`flex items-center space-x-3 rounded-md p-2 text-sm font-medium transition-all duration-200 ${
-              pathname === link.href
-                ? "bg-primary text-primary-foreground"
-                : "hover:bg-muted hover:text-foreground"
-            }`}
-          >
-            <link.icon className="h-5 w-5 shrink-0" />
-            {!isCollapsed && <span>{link.label}</span>}
-          </Link>
-        ))}
+        {sidebarLinks.map((link) =>
+          link.children ? (
+            <div key={link.label} className="space-y-1">
+              <button
+                onClick={() => toggleDropdown(link.label)}
+                className={`flex w-full items-center space-x-3 rounded-md p-2 text-sm font-medium transition-all duration-200 ${
+                  pathname.startsWith(
+                    link.children.find((child) => child.href)?.href || ""
+                  )
+                    ? "bg-primary text-primary-foreground"
+                    : "hover:bg-muted hover:text-foreground"
+                }`}
+              >
+                <link.icon className="h-5 w-5 shrink-0" />
+                {!isCollapsed && <span>{link.label}</span>}
+                {!isCollapsed && (
+                  <span className="ml-auto">
+                    {expandedItems[link.label] ? (
+                      <ChevronDown className="h-4 w-4" />
+                    ) : (
+                      <ChevronRight className="h-4 w-4" />
+                    )}
+                  </span>
+                )}
+              </button>
+              {!isCollapsed && expandedItems[link.label] && (
+                <div
+                  className="ml-8 border-l-2 border-muted pl-4 space-y-1 transition-all duration-300"
+                >
+                  {link.children.map((child) => (
+                    <Link
+                      key={child.href}
+                      href={child.href}
+                      onClick={handleLinkClick}
+                      className={`block rounded-md p-2 text-sm font-medium transition-all duration-200 ${
+                        pathname === child.href
+                          ? "bg-primary text-primary-foreground"
+                          : "hover:bg-muted hover:text-foreground"
+                      }`}
+                    >
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={handleLinkClick}
+              className={`flex items-center space-x-3 rounded-md p-2 text-sm font-medium transition-all duration-200 ${
+                pathname === link.href
+                  ? "bg-primary text-primary-foreground"
+                  : "hover:bg-muted hover:text-foreground"
+              }`}
+            >
+              <link.icon className="h-5 w-5 shrink-0" />
+              {!isCollapsed && <span>{link.label}</span>}
+            </Link>
+          )
+        )}
       </nav>
 
-      {/* Footer (Fixed to the bottom) */}
+      {/* Footer
       <div className="mt-auto px-2 pb-4">
         <Button
           variant="default"
@@ -103,7 +173,7 @@ export function Sidebar() {
         >
           Logout
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }
