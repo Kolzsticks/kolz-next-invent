@@ -12,13 +12,16 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { ModeToggle } from './theme-toggle';
+import { Package } from 'lucide-react'; // Example icon (you can replace it)
 
 export function Header() {
   return (
     <header className="sticky top-0 z-50 flex h-14 items-center border-b bg-background px-4 lg:px-6">
       <div className="flex flex-1 items-center justify-between">
         <div className="flex items-center space-x-4">
-          <h1 className="text-xl font-semibold">Inventory Pro</h1>
+          {/* Icon and Title */}
+          <Package className="h-6 w-6 text-primary" /> {/* Replace Package with your icon */}
+          <h1 className="text-xl font-semibold">InvyPro</h1>
         </div>
         <div className="flex items-center space-x-4">
           <ModeToggle />

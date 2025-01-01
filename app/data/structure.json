@@ -1,0 +1,222 @@
+ {
+    "Beverages": {
+        "Beer": {
+            "HEINEKEN": {"price": 2000, "venue": "lounge"},
+            "BIG WILLIAMS": {"price": 2000, "venue": "lounge"},
+            "DESPERADO": {"price": 1700, "venue": "lounge"},
+            "GOLDBERG": {"price": 1700, "venue": "lounge"},
+            "STOUT": {"price": 1700, "venue": "lounge"},
+            "GULDER": {"price": 1700, "venue": "lounge"},
+            "HERO": {"price": 1700, "venue": "lounge"},
+            "ICE": {"price": 1200, "venue": "lounge"},
+            "STAR RADLER": {"price": 1000, "venue": "lounge"},
+            "SMALL WILLIAM": {"price": 1000, "venue": "lounge"},
+            "33 BEER": {"price": 1700, "venue": "lounge"}
+        },
+        "Soft Drinks": {
+            "WATER": {
+                "50cl": {"price": 300, "venue": "lounge"},
+                "75cl": {"price": 500, "venue": "lounge"},
+                "regular": {"price": 500, "venue": "club"}
+            },
+            "BOTTLE MALT": {"price": 1000, "venue": "lounge"},
+            "CAN MALT": {"price": 1000, "venue": "lounge"},
+            "COKE": {"price": 1000, "venue": "lounge"},
+            "COKE_CLUB": {"price": 1500, "venue": "club"},
+            "FEARLESS": {"price": 1000, "venue": "lounge"},
+            "PREDATOR": {"price": 1000, "venue": "lounge"},
+            "EXOTIC": {"price": 3000, "venue": "lounge"},
+            "EXOTIC_CLUB": {"price": 4000, "venue": "club"},
+            "BLUE BULLET": {"price": 2000, "venue": "lounge"},
+            "BLUE BULLET_CLUB": {"price": 3000, "venue": "club"},
+            "MONSTER": {"price": 1500, "venue": "lounge"},
+            "MONSTER_CLUB": {"price": 3500, "venue": "club"},
+            "VITAMILK": {"price": 2500, "venue": "lounge"},
+            "HOLLANDIA": {"price": 3000, "venue": "lounge"},
+            "CLIMAX": {"price": 2000, "venue": "lounge"},
+            "BLACK BULLET": {"price": 2500, "venue": "lounge"}
+        },
+        "Juice Drinks": {
+            "PINEAPPLE": {"price": 2000, "venue": "lounge"},
+            "WATERMELON": {"price": 2000, "venue": "lounge"},
+            "PAWPAW": {"price": 2000, "venue": "lounge"},
+            "COCONUT DATE/TIGER FRUIT": {"price": 2000, "venue": "lounge"},
+            "FRIUTE SALAD & SAUCE": {"price": 2000, "venue": "lounge"},
+            "COCONUT MILK DRINK": {"price": 2000, "venue": "lounge"},
+            "PALM WINE": {"price": 3500, "venue": "lounge"}
+        }
+    },
+    "Spirits": {
+        "Cognac": {
+            "REMY MARTIN XO": {"price": 250000, "venue": "club"},
+            "REMY MARTIN VSOP": {"price": 100000, "venue": "club"},
+            "REMY MARTIN": {"price": 65000, "venue": "lounge"},
+            "HENNESSY VS": {
+                "lounge": {"price": 50000, "venue": "lounge"},
+                "club": {"price": 90000, "venue": "club"}
+            },
+            "HENNESSY VSOP": {
+                "lounge": {"price": 65000, "venue": "lounge"},
+                "club": {"price": 125000, "venue": "club"}
+            },
+            "MARTEL VS": {
+                "lounge": {"price": 65000, "venue": "lounge"},
+                "club": {"price": 65000, "venue": "club"}
+            },
+            "MARTEL BLUE SWIFT": {"price": 100000, "venue": "club"}
+        },
+        "Whiskey": {
+            "GOLD LABEL": {"price": 75000, "venue": "club"},
+            "BLACK LABEL": {"price": 35000, "venue": "lounge"},
+            "GREEN LABEL": {"price": 50000, "venue": "club"},
+            "JAMESON": {
+                "lounge": {"price": 35000, "venue": "lounge"},
+                "club": {"price": 50000, "venue": "club"}
+            },
+            "JACK DANIELS": {
+                "lounge": {"price": 30000, "venue": "lounge"},
+                "club": {"price": 50000, "venue": "club"}
+            },
+            "AMERICAN HONEY": {
+                "lounge": {"price": 35000, "venue": "lounge"},
+                "club": {"price": 45000, "venue": "club"}
+            },
+            "RED LABEL": {"price": 25000, "venue": "lounge"},
+            "BLACK TRAIN": {"price": 15000, "venue": "lounge"},
+            "ST. REMY VSOP": {"price": 20000, "venue": "lounge"}
+        },
+        "Vodka & Gin": {
+            "CIROC": {
+                "lounge": {"price": 60000, "venue": "lounge"},
+                "club": {"price": 80000, "venue": "club"}
+            },
+            "BIG VODKA": {"price": 15000, "venue": "lounge"},
+            "SMALL VODKA": {"price": 2500, "venue": "lounge"},
+            "BIG GORDONS": {"price": 15000, "venue": "lounge"},
+            "SMALL GORDONS": {"price": 2500, "venue": "lounge"}
+        },
+        "Tequila": {
+            "AZUL": {"price": 550000, "venue": "club"},
+            "OLMECA TEQUILA": {
+                "bottle": {"price": 25000, "venue": "lounge"},
+                "club_bottle": {"price": 50000, "venue": "club"},
+                "shot": {"price": 4000, "venue": "both"}
+            },
+            "DON JULIO": {"price": 60000, "venue": "club"}
+        }
+    },
+    "Champagne & Wine": {
+        "Premium Champagne": {
+            "GOLD BOTTLE": {"price": 360000, "venue": "club"},
+            "ACE OF SPADES": {"price": 380000, "venue": "club"},
+            "DON PERIGNON": {"price": 380000, "venue": "club"},
+            "MOET BRUT": {"price": 80000, "venue": "club"},
+            "MOET ROSE": {"price": 80000, "venue": "club"}
+        },
+        "Regular Champagne & Wine": {
+            "BEL-AIRE": {
+                "lounge": {"price": 70000, "venue": "lounge"},
+                "club": {"price": 85000, "venue": "club"}
+            },
+            "MARTINI ROSE": {
+                "lounge": {"price": 25000, "venue": "lounge"},
+                "club": {"price": 35000, "venue": "club"}
+            },
+            "ANDRE": {
+                "lounge": {"price": 22000, "venue": "lounge"},
+                "club": {"price": 30000, "venue": "club"}
+            },
+            "SUPEMATE": {"price": 8000, "venue": "lounge"},
+            "FOUR COUSIN": {"price": 15000, "venue": "lounge"},
+            "CARLO ROSSI": {"price": 12000, "venue": "lounge"}
+        }
+    },
+    "Food": {
+        "Rice Dishes": {
+            "FRIED RICE": {
+                "with CHICKEN": {"price": 8000},
+                "with TURKEY": {"price": 9000},
+                "with BEEF": {"price": 6000},
+                "with FISH": {"price": 5000},
+                "with BOILED EGGS": {"price": 4500}
+            },
+            "JOLLOF RICE": {
+                "with CHICKEN": {"price": 8000},
+                "with TURKEY": {"price": 9000},
+                "with BEEF": {"price": 6000},
+                "with FISH": {"price": 5000}
+            },
+            "WHITE RICE": {
+                "with TURKEY": {"price": 4500},
+                "with CHICKEN": {"price": 6000},
+                "with BEEF": {"price": 6000},
+                "with FISH": {"price": 5000}
+            },
+            "VEGETABLE RICE": {"price": 3500},
+            "OIL RICE": {"price": 3500},
+            "CINNAMON RICE": {"price": 4000}
+        },
+        "Swallow Dishes": {
+            "POUNDO": {
+                "with TURKEY": {"price": 8000},
+                "with CHICKEN": {"price": 7000},
+                "with BEEF": {"price": 6000},
+                "with FISH": {"price": 4000}
+            },
+            "SEMO": {
+                "with TURKEY": {"price": 8000},
+                "with CHICKEN": {"price": 7000},
+                "with FISH": {"price": 4000},
+                "with BEEF": {"price": 5000}
+            },
+            "EBA": {
+                "with TURKEY": {"price": 8000},
+                "with CHICKEN": {"price": 7000},
+                "with BEEF": {"price": 5500},
+                "with FISH": {"price": 4000}
+            },
+            "AMALA": {
+                "with TURKEY": {"price": 8500},
+                "with CHICKEN": {"price": 7500},
+                "with BEEF": {"price": 5500}
+            },
+            "STARCH": {
+                "with TURKEY": {"price": 8500},
+                "with CHICKEN": {"price": 7000},
+                "with BEEF": {"price": 5500},
+                "with FISH": {"price": 4500},
+                "with CATFISH": {"price": 7500}
+            }
+        },
+        "Pepper Soup": {
+            "CHICKEN PEPPER SOUP": {"price": 6000},
+            "TURKEY PEPPER SOUP": {"price": 7000},
+            "ASSORTED PEPPER SOUP": {"price": 3000},
+            "GOAT MEAT PEPPER SOUP": {"price": 3000},
+            "CATFISH PEPPER SOUP": {"price": 5000}
+        },
+        "Quick Meals": {
+            "SPAGHETTI BOLOGNESE": {"price": 6000},
+            "SPAGHETTI PLAIN": {"price": 3000},
+            "YAM & OWO": {"price": 5000},
+            "COOL SLAW": {"price": 1000},
+            "SHAWAMA": {"price": 5000},
+            "OMELETTE": {"price": 3000},
+            "YAM & EGG": {"price": 3000},
+            "INDOMIE & EGG": {"price": 3500},
+            "FRIED PLANTAIN & EGG": {"price": 4000}
+        }
+    },
+    "Cakes": {
+        "Birthday Cakes": {
+            "8 INCHES": {"price": 18000},
+            "9 INCHES": {"price": 19000},
+            "10 INCHES": {"price": 20000},
+            "12 INCHES": {"price": 21000},
+            "14 INCHES": {"price": 22000}
+        }
+    }
+}
+
+
+
