@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import { ThemeToggle } from './theme-toggle';
+import { ModeToggle } from './theme-toggle';
 
 export function Header() {
   return (
@@ -21,7 +21,7 @@ export function Header() {
           <h1 className="text-xl font-semibold">Inventory Pro</h1>
         </div>
         <div className="flex items-center space-x-4">
-          <ThemeToggle />
+          <ModeToggle />
           <Button variant="ghost" size="icon">
             <Bell className="h-5 w-5" />
           </Button>
