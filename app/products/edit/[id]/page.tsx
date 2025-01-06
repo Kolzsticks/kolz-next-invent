@@ -1,5 +1,4 @@
 import { getAllProducts, updateProduct } from "@/lib/actions"; // Adjust to fetch and update products
-import { Product } from "@/types/Product";
 import Link from "next/link";
 import { revalidatePath } from "next/cache";
 import { Button } from "@/components/ui/button"; // ShadCN UI Button

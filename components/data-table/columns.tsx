@@ -11,7 +11,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 
-export function createColumns<T>(config: {
+interface RowData {
+  id: string; // Ensure that every row has an `id` property of type `string`.
+  [key: string]: any; // Allow additional properties.
+}
+
+export function createColumns<T extends RowData>(config: {
   columns: Array<{
     accessorKey: keyof T;
     header: string;
