@@ -8,8 +8,9 @@ import { Label } from "@/components/ui/label"; // ShadCN UI Label
 
 export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
   // Dynamically fetch products to get fresh data after updates
-  const products: Product[] = await getAllProducts();
-  const product = products.find((p) => p.id === Number(params.id));
+  const id = Number((await params).id);
+  const products = await getAllProducts();
+  const product = products.find((p) => p.id === Number(id));
 
   if (!product) {
     return <div>Product not found</div>;
