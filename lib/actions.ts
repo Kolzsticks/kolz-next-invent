@@ -46,9 +46,10 @@ export async function getAllProducts() {
 export async function updateProduct(id: number, data: {
   name?: string;
   category?: string;
-  subcategory?: string;
+  subcategory: string | null;
   price?: number;
-  venue?: string;
+  quantity: number,
+  venue: string | null;
 }) {
   try {
     const updatedProduct = await db.product.update({
@@ -71,3 +72,25 @@ export async function deleteProduct(id: number) {
     throw new Error('Failed to delete product');
   }
 }
+
+
+
+export const handleUpdate = async (formData: FormData, productId: number) => {
+
+  const name = formData.get("name") as string;
+  const category = formData.get("category") as string;
+  const subcategory = formData.get("subcategory") as string | null;
+  const price = parseFloat(formData.get("price") as string);
+  const venue = formData.get("venue") as string | null;
+  const quantity = parseInt(formData.get("quantity") as string);
+    // Update the product data
+    await updateProduct(productId, {
+      name,
+      category,
+      subcategory,
+      price,
+      venue,
+      quantity,
+    });
+
+};

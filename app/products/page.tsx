@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { DataTable } from "@/components/data-table/data-table";
 import { createColumns } from "@/components/data-table/columns";
@@ -27,7 +28,7 @@ export default function ProductsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("/api/products"); // Fetch products from API
+        const response = await fetch("/api/products", { cache: "force-cache" }); // Fetch products from API
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }

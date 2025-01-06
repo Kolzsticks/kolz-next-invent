@@ -1,14 +1,15 @@
-'use client';
+"use client";
 
-import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { ColumnDef } from "@tanstack/react-table";
+import { MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 export function createColumns<T>(config: {
   columns: Array<{
@@ -22,7 +23,7 @@ export function createColumns<T>(config: {
       header: col.header,
     })),
     {
-      id: 'actions',
+      id: "actions",
       cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -31,7 +32,9 @@ export function createColumns<T>(config: {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <Link href={`/products/edit/${row.original.id}`}>
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+            </Link>
             <DropdownMenuItem className="text-destructive">
               Delete
             </DropdownMenuItem>
