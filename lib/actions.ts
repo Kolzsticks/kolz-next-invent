@@ -2,6 +2,8 @@
 
 // lib/actions.ts
 import { db } from "./db";
+import { Prisma } from "@prisma/client";
+
 
 
 export async function createProduct(productData: {
@@ -42,26 +44,37 @@ export async function getAllProducts() {
   }
 }
 
-// UPDATE a product
-export async function updateProduct(id: number, data: {
-  name?: string;
-  category?: string;
+
+
+interface UpdateProductData {
+  name: string;
+  category: string;
   subcategory: string | null;
-  price?: number;
-  quantity: number,
+  price: number;
   venue: string | null;
-}) {
-  try {
-    const updatedProduct = await db.product.update({
-      where: { id },
-      data,
-    });
-    return updatedProduct;
-  } catch (error) {
-    throw new Error('Failed to update product');
-  }
+  quantity: number;
 }
 
+export async function updateProduct(id: number, data: {
+  name: string;
+  category: string;
+  subcategory: string | null;
+  price: number;
+  venue: string | null;
+  quantity: number;
+}) {
+  return await db.product.update({
+    where: { id },
+    data: {
+      name: data.name,
+      category: data.category,
+      subcategory: data.subcategory,
+      price: data.price ? new Prisma.Decimal(data.price.toString()) : undefined, // Convert to string first
+      venue: data.venue,
+      quantity: data.quantity
+    },
+  });
+}
 // DELETE a product
 export async function deleteProduct(id: number) {
   try {
@@ -75,22 +88,3 @@ export async function deleteProduct(id: number) {
 
 
 
-export const handleUpdate = async (formData: FormData, productId: number) => {
-
-  const name = formData.get("name") as string;
-  const category = formData.get("category") as string;
-  const subcategory = formData.get("subcategory") as string | null;
-  const price = parseFloat(formData.get("price") as string);
-  const venue = formData.get("venue") as string | null;
-  const quantity = parseInt(formData.get("quantity") as string);
-    // Update the product data
-    await updateProduct(productId, {
-      name,
-      category,
-      subcategory,
-      price,
-      venue,
-      quantity,
-    });
-
-};
