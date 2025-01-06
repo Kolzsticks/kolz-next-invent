@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { DataTable } from "@/components/data-table/data-table";
 import { createColumns } from "@/components/data-table/columns";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton"; // Import ShadCN UI Skeleton component
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Product } from "@/types/Product";
@@ -10,31 +11,34 @@ import { Product } from "@/types/Product";
 const columns = createColumns({
   columns: [
     { accessorKey: "name", header: "Name" },
-    { accessorKey: "buyPrice", header: "Buy Price" },
-    { accessorKey: "salePrice", header: "Sale Price" },
+    { accessorKey: "category", header: "Category" },
+    { accessorKey: "subcategory", header: "Subcategory" }, // Handle undefined values
+    { accessorKey: "price", header: "Price" },
+    { accessorKey: "venue", header: "Venue" },
     { accessorKey: "quantity", header: "Quantity" },
-    // You can add more columns here based on what data you need.
   ],
 });
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState<Product[]>([]);  // State for storing products
-  const [loading, setLoading] = useState<boolean>(true);    // State for loading
-  const [error, setError] = useState<string | null>(null);   // State for error
+  const [products, setProducts] = useState<Product[]>([]); // Products state
+  const [loading, setLoading] = useState<boolean>(true); // Loading state
+  const [error, setError] = useState<string | null>(null); // Error state
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("/api/products");  // Fetch products from API
+        const response = await fetch("/api/products"); // Fetch products from API
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
-        const data = await response.json();  // Extract JSON data
-        setProducts(data);  // Set the fetched products to state
+        const data: Product[] = await response.json(); // Parse data
+        setProducts(data); // Set products
       } catch (err) {
-        setError(err instanceof Error ? err.message : "An unknown error occurred");  // Handle errors
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred"
+        ); // Handle errors
       } finally {
-        setLoading(false);  // Set loading to false after fetch is complete
+        setLoading(false); // Set loading to false
       }
     };
 
@@ -42,11 +46,26 @@ export default function ProductsPage() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;  // Display loading message
+    // Display Skeleton Loader as a table with 6 columns
+    return (
+      <div className="flex flex-col items-center justify-center space-y-4 w-full">
+        {/* Create a table structure for the skeleton loader */}
+        {[...Array(5)].map((_, index) => (
+          <div key={index} className="flex space-x-4">
+            <Skeleton className="h-12 w-[200px]" />
+            <Skeleton className="h-12 w-[150px]" />
+            <Skeleton className="h-12 w-[150px]" />
+            <Skeleton className="h-12 w-[150px]" />
+            <Skeleton className="h-12 w-[150px]" />
+            <Skeleton className="h-12 w-[150px]" />
+          </div>
+        ))}
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Error: {error}</div>;  // Display error message
+    return <div>Error: {error}</div>; // Display error message
   }
 
   return (
@@ -59,7 +78,8 @@ export default function ProductsPage() {
           </Button>
         </Link>
       </div>
-      <DataTable columns={columns} data={products} />  {/* Pass the fetched products to the DataTable */}
+      <DataTable columns={columns} data={products} />{" "}
+      {/* Pass products to DataTable */}
     </div>
   );
 }

@@ -1,11 +1,13 @@
 
 
+// Adjust the Product type to match database schema
 export interface Product {
-    id: number;
-    name: string;
-    price: number;
-    quantity: number;
+  name: string;
     category: string;
-    subCategory: string;
-  }
+    subcategory: string | null;
+    price: number;
+    venue: string | null;
+    quantity: number;
+    id: number;
+}
   
