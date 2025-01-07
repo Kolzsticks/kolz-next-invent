@@ -1,5 +1,4 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -37,6 +36,15 @@ const productSchema = z.object({
     .transform((val) => parseInt(val)), // Convert string to integer
   venue: z.string().optional(),
 });
+
+import { getCldImageUrl } from 'next-cloudinary';
+ 
+const url = getCldImageUrl({
+  width: 960,
+  height: 600,
+  src: '<Public ID>'
+});
+
 
 export function ProductForm() {
   const [loading, setLoading] = useState(false); // Loading state
@@ -221,11 +229,12 @@ export function ProductForm() {
             )}
           />
         </div>
+       
         {/* Submit Button */}
         <Button type="submit" disabled={loading}>
           {loading ? (
             <div className="flex items-center space-x-2">
-              <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
+              <span className="h-4 w-4 animate-spin rounded-full border-4 border-primary border-t-transparent"></span>
               <span>Adding...</span>
             </div>
           ) : (

@@ -13,7 +13,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
   // Serialize the data by converting to JSON and back
   const serializedProduct = JSON.parse(JSON.stringify(product));
-  console.log(serializedProduct)
+
 
   return (
     <div className="flex flex-col justify-center items-center m-auto w-full max-w-3xl p-4 sm:p-6 md:p-8">

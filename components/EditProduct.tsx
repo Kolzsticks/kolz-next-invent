@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { updateProduct } from "@/lib/actions";
+import { useState } from "react";
 
 interface Product {
   id: number;
@@ -22,9 +23,11 @@ interface Product {
 
 export function ProductForm({ product }: { product: Product }) {
   const router = useRouter();
+  const [loading, setLoading] = useState(false); // Loading state
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true); // Start loading
     const formData = new FormData(e.currentTarget);
 
     const price = formData.get("price");
@@ -53,31 +56,25 @@ export function ProductForm({ product }: { product: Product }) {
       }
 
       await updateProduct(product.id, updatedProduct);
-      
+
       toast.success("Product updated successfully!");
-      // router.refresh();
-      // router.push('/products');
     } catch (error) {
       toast.error("Failed to update product. Please try again.");
       console.error(error);
+    } finally {
+      setLoading(false); // End loading
     }
   };
 
   return (
     <>
-  
       <form onSubmit={handleSubmit} className="space-y-6 w-full">
         {/* Name input field */}
         <div className="space-y-2">
           <Label htmlFor="name" className="text-lg font-medium">
             Name
           </Label>
-          <Input
-            id="name"
-            name="name"
-            defaultValue={product.name}
-            required
-          />
+          <Input id="name" name="name" defaultValue={product.name} required />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
@@ -144,18 +141,21 @@ export function ProductForm({ product }: { product: Product }) {
             <Label htmlFor="venue" className="text-lg font-medium">
               Venue
             </Label>
-            <Input
-              id="venue"
-              name="venue"
-              defaultValue={product.venue || ""}
-            />
+            <Input id="venue" name="venue" defaultValue={product.venue || ""} />
           </div>
         </div>
 
-        {/* Submit button */}
-        <div className="flex gap-4">
-          <Button type="submit">
-            Update Product
+        <div className="grid lg:grid-cols-2 grid-cols-1 w-full gap-8">
+          {/* Submit Button */}
+          <Button type="submit" disabled={loading}>
+            {loading ? (
+              <div className="flex items-center space-x-2">
+                <span className="h-4 w-4 animate-spin rounded-full border-4 border-primary border-t-transparent"></span>
+                <span>Updating...</span>
+              </div>
+            ) : (
+              "Update"
+            )}
           </Button>
 
           <Link href="/products">

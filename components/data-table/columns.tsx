@@ -32,7 +32,7 @@ export function createColumns<T extends Record<string, any>>(config: {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <Link href={`/products/edit/${row.original.id}`}>
+            <Link className="cursor-pointer" href={`/products/edit/${row.original.id}`}>
               <DropdownMenuItem>Edit</DropdownMenuItem>
             </Link>
             <DropdownMenuItem className="text-destructive">

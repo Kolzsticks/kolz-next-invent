@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
+import ProgressProviders from "@/components/ProgressProvider";
 import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -27,16 +28,18 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="flex h-screen">
-            <Sidebar />
-            <div className="flex-1 flex flex-col overflow-hidden">
-              <Header />
-              <div className="flex-1 overflow-y-auto p-4 lg:p-6">
-                {children}
-                <Toaster  richColors={true}/>
+          <ProgressProviders>
+            <main className="flex h-screen">
+              <Sidebar />
+              <div className="flex-1 flex flex-col overflow-hidden">
+                <Header />
+                <div className="flex-1 overflow-y-auto p-4 lg:p-6">
+                  {children}
+                  <Toaster richColors={true} />
+                </div>
               </div>
-            </div>
-          </main>
+            </main>
+          </ProgressProviders>
         </ThemeProvider>
       </body>
     </html>

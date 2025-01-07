@@ -28,7 +28,9 @@ export default function ProductsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("/api/products", { cache: "force-cache" }); // Fetch products from API
+        const response = await fetch("/api/products", { 
+          next: {revalidate: 60}
+         }); // Fetch products from API
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
