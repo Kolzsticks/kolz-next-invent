@@ -22,12 +22,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 404 });
     }
 
-    console.log("Stored password hash:", user.password); // Debug log
+    // console.log("Stored password hash:", user.password); // Debug log
 
     // Compare the plaintext password with the hashed password
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    console.log("Password comparison result:", isPasswordValid); // Debug log
+    // console.log("Password comparison result:", isPasswordValid); // Debug log
 
     if (!isPasswordValid) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
