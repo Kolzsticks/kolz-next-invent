@@ -21,7 +21,7 @@ const ImageDropdown: React.FC<ImageDropdownProps> = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="w-full mt-2 text-center">
+        <Button variant="secondary" className="w-full mt-2 text-center">
           Options
         </Button>
       </DropdownMenuTrigger>
