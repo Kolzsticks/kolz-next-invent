@@ -8,7 +8,8 @@ import { Product } from "@/types/Product";
 
 // Server Component
 async function fetchProducts() {
-  const response = await fetch("http://localhost:3000/api/products", {
+  const base_url = process.env.NEXT_PUBLIC_API_URL;
+  const response = await fetch(`${base_url}/api/products`, {
     next: { revalidate: 60 },
   });
 

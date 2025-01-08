@@ -64,7 +64,6 @@ async function Home() {
 
     revalidatePath("/products/add/images");
   }
-  
 
   return (
     <div className="p-6">
@@ -94,22 +93,23 @@ async function Home() {
             className="p-2 hover:shadow-lg transition-shadow duration-200"
           >
             <div className="aspect-square relative rounded-md overflow-hidden">
-            <CldImage
-  width={400}
-  height={400}
-  src={`${product_image.secure_url}?v=${new Date().getTime()}`} // Append timestamp for cache busting
-  alt={product_image.context?.alt || ""}
-  className="object-cover w-full h-full hover:scale-105 transition-transform duration-200"
-/>
-
-
+              <CldImage
+                width={400}
+                height={400}
+                src={`${product_image.secure_url}?v=${new Date().getTime()}`} // Append timestamp for cache busting
+                alt={product_image.context?.alt || ""}
+                className="object-cover w-full h-full hover:scale-105 transition-transform duration-200"
+              />
             </div>
             {product_image.context?.caption && (
               <p className="mt-2 text-sm truncate font-medium text-neutral-700 dark:text-neutral-200">
                 {product_image.context.caption}
               </p>
             )}
-            <ImageDropdown publicId={product_image.public_id} onDelete={deleteImage} />
+            <ImageDropdown
+              publicId={product_image.public_id}
+              onDelete={deleteImage}
+            />
           </Card>
         ))}
       </div>
