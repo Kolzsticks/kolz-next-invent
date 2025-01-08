@@ -16,13 +16,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
 
 const sidebarLinks = [
-  { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+  { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard", color: "text-blue-500" },
   {
     label: "Products",
     icon: Package,
+    color: "text-purple-500",
     children: [
       { href: "/products/add", label: "Add Product" },
       { href: "/products", label: "Manage Products" },
@@ -31,6 +31,7 @@ const sidebarLinks = [
   {
     label: "User Management",
     icon: Users,
+    color: "text-orange-500",
     children: [
       { href: "/users/manage", label: "Manage Users" },
       { href: "/users/groups", label: "Manage Groups" },
@@ -39,14 +40,15 @@ const sidebarLinks = [
   {
     label: "Sales",
     icon: ShoppingCart,
+    color: "text-green-500",
     children: [
       { href: "/sales/manage", label: "Manage Sales" },
       { href: "/sales/add", label: "Add Sales" },
     ],
   },
-  { href: "/categories", icon: Layers, label: "Categories" },
-  { href: "/media", icon: Cloud, label: "Media Library" },
-  { href: "/reports", icon: BarChart2, label: "Reports" },
+  { href: "/categories", icon: Layers, label: "Categories", color: "text-red-500" },
+  { href: "/media", icon: Cloud, label: "Media Library", color: "text-yellow-500" },
+  { href: "/reports", icon: BarChart2, label: "Reports", color: "text-teal-500" },
 ];
 
 export function Sidebar() {
@@ -110,10 +112,10 @@ export function Sidebar() {
                     link.children.find((child) => child.href)?.href || ""
                   )
                     ? "bg-primary text-primary-foreground"
-                    : "hover:bg-muted hover:text-foreground"
+                    : "hover:bg-green-500/20 "
                 }`}
               >
-                <link.icon className="h-5 w-5 shrink-0" />
+                <link.icon className={`h-5 w-5 shrink-0 ${link.color}`} />
                 {!isCollapsed && <span>{link.label}</span>}
                 {!isCollapsed && (
                   <span className="ml-auto">
@@ -126,9 +128,7 @@ export function Sidebar() {
                 )}
               </button>
               {!isCollapsed && expandedItems[link.label] && (
-                <div
-                  className="ml-8 border-l-2 border-muted pl-4 space-y-1 transition-all duration-300"
-                >
+                <div className="ml-8 border-l-2 border-muted pl-4 space-y-1 transition-all duration-300">
                   {link.children.map((child) => (
                     <Link
                       key={child.href}
@@ -137,7 +137,7 @@ export function Sidebar() {
                       className={`block rounded-md p-2 text-sm font-medium transition-all duration-200 ${
                         pathname === child.href
                           ? "bg-primary text-primary-foreground"
-                          : "hover:bg-muted hover:text-foreground"
+                          : "hover:bg-green-500/20 "
                       }`}
                     >
                       {child.label}
@@ -154,26 +154,15 @@ export function Sidebar() {
               className={`flex items-center space-x-3 rounded-md p-2 text-sm font-medium transition-all duration-200 ${
                 pathname === link.href
                   ? "bg-primary text-primary-foreground"
-                  : "hover:bg-muted hover:text-foreground"
+                  : "hover:bg-green-500/20 "
               }`}
             >
-              <link.icon className="h-5 w-5 shrink-0" />
+              <link.icon className={`h-5 w-5 shrink-0 ${link.color}`} />
               {!isCollapsed && <span>{link.label}</span>}
             </Link>
           )
         )}
       </nav>
-
-      {/* Footer
-      <div className="mt-auto px-2 pb-4">
-        <Button
-          variant="default"
-          size="sm"
-          className="w-full rounded-md bg-zinc-100 text-black hover:bg-zinc-200 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700 focus:ring-2 focus:ring-red-500 focus:outline-none"
-        >
-          Logout
-        </Button>
-      </div> */}
     </div>
   );
 }

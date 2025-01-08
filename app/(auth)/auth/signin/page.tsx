@@ -45,7 +45,7 @@ export default function SignIn() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4">
+    <div className="flex items-center justify-center h-[100svh] p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="flex items-center justify-between px-6 py-4  rounded-t-lg">
           <div className="flex items-center space-x-2">
