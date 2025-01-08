@@ -1,58 +1,53 @@
-"use client";
+import { columns, DataTable } from "@/components/data-table/data-table";
 
-import { useEffect, useState } from "react";
-import { DataTable } from "@/components/data-table/data-table";
-import { createColumns } from "@/components/data-table/columns";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton"; // Import ShadCN UI Skeleton component
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Product } from "@/types/Product";
 
-const columns = createColumns({
-  columns: [
-    { accessorKey: "name", header: "Name" },
-    { accessorKey: "category", header: "Category" },
-    { accessorKey: "subcategory", header: "Subcategory" }, // Handle undefined values
-    { accessorKey: "price", header: "Price" },
-    { accessorKey: "venue", header: "Venue" },
-    { accessorKey: "quantity", header: "Quantity" },
-  ],
-});
+// Server Component
+async function fetchProducts() {
+  const response = await fetch("http://localhost:3000/api/products", {
+    next: { revalidate: 60 },
+  });
 
-export default function ProductsPage() {
-  const [products, setProducts] = useState<Product[]>([]); // Products state
-  const [loading, setLoading] = useState<boolean>(true); // Loading state
-  const [error, setError] = useState<string | null>(null); // Error state
+  if (!response.ok) {
+    throw new Error("Failed to fetch products");
+  }
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch("/api/products", { 
-          next: {revalidate: 60}
-         }); // Fetch products from API
-        if (!response.ok) {
-          throw new Error("Failed to fetch products");
-        }
-        const data: Product[] = await response.json(); // Parse data
-        setProducts(data); // Set products
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "An unknown error occurred"
-        ); // Handle errors
-      } finally {
-        setLoading(false); // Set loading to false
-      }
-    };
+  return response.json();
+}
 
-    fetchProducts();
-  }, []);
+export default async function ProductsPage() {
+  let products: Product[] = [];
+  let error: string | null = null;
 
-  if (loading) {
-    // Display Skeleton Loader as a table with 6 columns
+  try {
+    products = await fetchProducts();
+  } catch (err) {
+    error = err instanceof Error ? err.message : "An unknown error occurred";
+  }
+
+  return <ProductsClient products={products} error={error} />;
+}
+
+// Client Component
+function ProductsClient({
+  products,
+  error,
+}: {
+  products: Product[];
+  error: string | null;
+}) {
+  if (error) {
+    return <div>Error: {error}</div>; // Display error message
+  }
+
+  if (products.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center space-y-4 w-full">
-        {/* Create a table structure for the skeleton loader */}
+        {/* Skeleton Loader for empty products */}
         {[...Array(5)].map((_, index) => (
           <div key={index} className="flex space-x-4">
             <Skeleton className="h-12 w-[200px]" />
@@ -67,10 +62,6 @@ export default function ProductsPage() {
     );
   }
 
-  if (error) {
-    return <div>Error: {error}</div>; // Display error message
-  }
-
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -81,8 +72,7 @@ export default function ProductsPage() {
           </Button>
         </Link>
       </div>
-      <DataTable columns={columns} data={products} />{" "}
-      {/* Pass products to DataTable */}
+      <DataTable  columns={columns} data={products} />
     </div>
   );
 }

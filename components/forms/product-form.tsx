@@ -21,11 +21,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner"; // Importing toast for success alert
+import Link from "next/link";
+
+
+
+
 
 const productSchema = z.object({
   name: z.string().min(1, { message: "Product name is required" }),
   category: z.string().min(1, { message: "Category is required" }),
-  subcategory: z.string().optional(),
+  subcategory: z.string().min(1, { message: "Subcategory is required" }),
   price: z
     .string()
     .min(1, { message: "Price is required" })
@@ -34,33 +39,27 @@ const productSchema = z.object({
     .string()
     .min(1, { message: "Quantity is required" })
     .transform((val) => parseInt(val)), // Convert string to integer
-  venue: z.string().optional(),
+  venue: z.string().min(1, { message: "Venue is required" }),
 });
 
-import { getCldImageUrl } from 'next-cloudinary';
- 
-const url = getCldImageUrl({
-  width: 960,
-  height: 600,
-  src: '<Public ID>'
-});
-
+// Extracting the inferred type after transformation
+type ProductFormValues = z.input<typeof productSchema>;
 
 export function ProductForm() {
   const [loading, setLoading] = useState(false); // Loading state
-  const form = useForm<z.infer<typeof productSchema>>({
+  const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
     defaultValues: {
       name: "",
-      price: 0,
+      price: "0", // Default as string to match schema input
       category: "",
       subcategory: "",
-      quantity: 0,
+      quantity: "0", // Default as string to match schema input
       venue: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof productSchema>) {
+  async function onSubmit(values: z.input<typeof productSchema>) {
     setLoading(true); // Start loading
     try {
       const response = await fetch("/api/products", {
@@ -72,7 +71,15 @@ export function ProductForm() {
       });
 
       if (response.ok) {
-        toast.success("Product added successfully");
+        toast.success(
+          <div>
+            Product added successfully.{" "}
+            <Link href="/products" className="text-blue-500 underline">
+              View Products
+            </Link>
+          </div>
+        );
+        
         form.reset(); // Reset the form on success
       } else {
         const errorData = await response.json(); // Try to get error details from the server
@@ -229,7 +236,7 @@ export function ProductForm() {
             )}
           />
         </div>
-       
+
         {/* Submit Button */}
         <Button type="submit" disabled={loading}>
           {loading ? (

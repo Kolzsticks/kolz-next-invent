@@ -8,6 +8,8 @@ import { UploadCloud } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
+import ImageDropdown from "@/components/image_submission/DeleteImg"; // Import the Dropdown component
+
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -24,7 +26,7 @@ interface CloudinaryResource {
 }
 
 async function Home() {
-  const { resources: sneakers } = await cloudinary.api.resources_by_tag(
+  const { resources: products_image } = await cloudinary.api.resources_by_tag(
     "nextjs-server-actions-upload-sneakers",
     { context: true }
   );
@@ -56,6 +58,12 @@ async function Home() {
     revalidatePath("/products/add/images");
   }
 
+  async function deleteImage(publicId: string) {
+    "use server";
+    await cloudinary.uploader.destroy(publicId);
+    revalidatePath("/products/add/images");
+  }
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
@@ -72,31 +80,32 @@ async function Home() {
           <Input id="image" type="file" name="image" required />
         </div>
         <Button type="submit">
-          {" "}
-          <UploadCloud className="h-4 w-4" /> Upload
+          <UploadCloud className="h-4 w-4 mr-2" />
+          Upload
         </Button>
       </form>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-8">
-        {sneakers.map((sneaker: CloudinaryResource) => (
+        {products_image.map((product_image: CloudinaryResource) => (
           <Card
-            key={sneaker.public_id}
+            key={product_image.public_id}
             className="p-2 hover:shadow-lg transition-shadow duration-200"
           >
             <div className="aspect-square relative rounded-md overflow-hidden">
               <CldImage
                 width={400}
                 height={400}
-                src={sneaker.public_id}
-                alt={sneaker.context?.alt || ""}
+                src={product_image.public_id}
+                alt={product_image.context?.alt || ""}
                 className="object-cover w-full h-full hover:scale-105 transition-transform duration-200"
               />
             </div>
-            {sneaker.context?.caption && (
+            {product_image.context?.caption && (
               <p className="mt-2 text-sm truncate font-medium text-neutral-700 dark:text-neutral-200">
-                {sneaker.context.caption}
+                {product_image.context.caption}
               </p>
             )}
+            <ImageDropdown publicId={product_image.public_id} onDelete={deleteImage} />
           </Card>
         ))}
       </div>

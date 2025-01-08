@@ -19,16 +19,38 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { createColumns } from "@/components/data-table/columns";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+interface DataTableProps<TData> {
+  columns: ColumnDef<TData>[]; // Column definitions typed to match TData
+  data: TData[];              // Data array typed as TData
 }
 
-export function DataTable<TData, TValue>({
+// Example data type
+interface Product {
+  name: string;
+  category: string;
+  subcategory?: string;
+  price: number;
+  venue: string;
+  quantity: number;
+}
+
+export const columns: ColumnDef<Product>[] = createColumns({
+  columns: [
+    { accessorKey: "name", header: "Name" },
+    { accessorKey: "category", header: "Category" },
+    { accessorKey: "subcategory", header: "Subcategory" }, // Handle undefined values
+    { accessorKey: "price", header: "Price" },
+    { accessorKey: "venue", header: "Venue" },
+    { accessorKey: "quantity", header: "Quantity" },
+  ],
+});
+
+export function DataTable<TData>({
   columns,
   data,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
