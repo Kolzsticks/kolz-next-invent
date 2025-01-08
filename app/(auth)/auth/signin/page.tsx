@@ -23,6 +23,7 @@ import {
 import { useState } from "react";
 import ErrorMessage from "@/components/error-message";
 import { Button } from "@/components/ui/button";
+import { Package } from "lucide-react";
 
 export default function SignIn() {
     const [globalError, setGlobalError] = useState<string>("");
@@ -48,11 +49,13 @@ export default function SignIn() {
     return (
         <div className="flex items-center justify-center min-h-screen p-4">
             <Card className="w-full max-w-md">
-                <CardHeader>
-                    <CardTitle className="text-3xl font-bold text-center text-gray-800">
-                        Welcome Back
-                    </CardTitle>
-                </CardHeader>
+            <CardHeader className="flex items-center justify-between px-6 py-4  rounded-t-lg">
+    <div className="flex items-center space-x-2">
+        <Package className="h-8 w-8 text-primary" /> {/* Replace Package with your icon */}
+        <CardTitle className="text-3xl font-bold ">Login InviPro</CardTitle>
+    </div>
+</CardHeader>
+
                 <CardContent>
                     {globalError && <ErrorMessage error={globalError} />}
                     <Form {...form}>
