@@ -60,8 +60,7 @@ async function Home() {
 
   async function deleteImage(publicId: string) {
     "use server";
-    await cloudinary.uploader.destroy(publicId, { invalidate: true });
-
+    await cloudinary.uploader.destroy(publicId);
     revalidatePath("/products/add/images");
   }
 
@@ -96,7 +95,7 @@ async function Home() {
               <CldImage
                 width={400}
                 height={400}
-                src={`${product_image.secure_url}?v=${new Date().getTime()}`} // Append timestamp for cache busting
+                src={product_image.public_id}
                 alt={product_image.context?.alt || ""}
                 className="object-cover w-full h-full hover:scale-105 transition-transform duration-200"
               />
@@ -106,10 +105,7 @@ async function Home() {
                 {product_image.context.caption}
               </p>
             )}
-            <ImageDropdown
-              publicId={product_image.public_id}
-              onDelete={deleteImage}
-            />
+            <ImageDropdown publicId={product_image.public_id} onDelete={deleteImage} />
           </Card>
         ))}
       </div>
