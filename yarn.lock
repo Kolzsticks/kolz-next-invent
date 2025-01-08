@@ -1893,6 +1893,11 @@ jose@^5.9.3, jose@^5.9.6:
   resolved "https://registry.yarnpkg.com/jose/-/jose-5.9.6.tgz#77f1f901d88ebdc405e57cce08d2a91f47521883"
   integrity sha512-AMlnetc9+CV9asI19zHmrgS/WYsWUwCn2R7RzlbJWD7F9eWYUTGyBmU9o6PxngtLGOiDGPRu+Uc4fhKzbpteZQ==
 
+js-cookie@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-3.0.5.tgz#0b7e2fd0c01552c58ba86e0841f94dc2557dcdbc"
+  integrity sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==
+
 "js-tokens@^3.0.0 || ^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
@@ -2019,6 +2024,13 @@ next-auth@^5.0.0-beta.25:
   integrity sha512-2dJJw1sHQl2qxCrRk+KTQbeH+izFbGFPuJj5eGgBZFYyiYYtvlrBeUw1E/OJJxTRjuxbSYGnCTkUIRsIIW0bog==
   dependencies:
     "@auth/core" "0.37.2"
+
+next-client-cookies@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/next-client-cookies/-/next-client-cookies-2.0.1.tgz#bcc52f4f4fe674e93be9a7d6edacb153175a3420"
+  integrity sha512-iut6Q+vc+2dfnaFVgAvb2Hsch872JO2r08LNoJ/bF8Gqi+zANoGqOL+TJLBq163GqEwjtGGEcm6DUzo5+5Za8g==
+  dependencies:
+    js-cookie "^3.0.5"
 
 next-cloudinary@^6.16.0:
   version "6.16.0"

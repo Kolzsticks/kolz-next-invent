@@ -5,6 +5,7 @@ import { Package, DollarSign, ShoppingCart, TrendingUp } from "lucide-react";
 import { DataTable } from "@/components/data-table/data-table";
 import { createColumns } from "@/components/data-table/columns";
 import CombinedCharts from "@/components/data-table/combined-charts";
+import CookieChecker from "@/components/CheckCookie";
 
 const salesData = [
   { name: "Jan", value: 400 },
@@ -89,9 +90,11 @@ const columnsConfig = {
 };
 
 export default function DashboardPage() {
+
   return (
     <div className="space-y-16">
       {/* Overview Cards */}
+       <CookieChecker />
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -174,6 +177,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+     
     </div>
   );
 }

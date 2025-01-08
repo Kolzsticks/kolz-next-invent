@@ -13,6 +13,7 @@ import {
 } from '../ui/dropdown-menu';
 import { ModeToggle } from './theme-toggle';
 import { Package } from 'lucide-react'; // Example icon (you can replace it)
+import { handleSignOut } from '@/app/actions/authActions';
 
 export function Header() {
   return (
@@ -55,7 +56,12 @@ export function Header() {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                Log out
+              <form action={handleSignOut} className="w-full">
+                    
+                         Log out
+                  
+                  </form>
+               
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

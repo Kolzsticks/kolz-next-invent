@@ -1,6 +1,8 @@
 import NextAuth, { User } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { signInSchema } from './lib/zod';
+import { cookies } from 'next/headers';
+
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -61,6 +63,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         // Add the user information to the token
         token.id = user.id as string;
+
+        // Set a cookie after successful login
+        const expiresAt = new Date();
+        expiresAt.setMinutes(expiresAt.getMinutes() + 10); // Cookie expires in 10 minutes
+        (await cookies()).set('loggedin', 'true', { expires: expiresAt });
       }
       return token;
     },
