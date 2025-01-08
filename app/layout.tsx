@@ -1,6 +1,7 @@
-import './globals.css'
-import CookiesProviderLayout from '@/components/CookiesProvider';
-import { SessionProvider } from 'next-auth/react';
+import "./globals.css";
+import CookiesProviderLayout from "@/components/CookiesProvider";
+import { SessionProvider } from "next-auth/react";
+import { ThemeProvider } from "@/components/theme-provider";
 
 
 export default function RootLayout({
@@ -11,9 +12,16 @@ export default function RootLayout({
   return (
     <SessionProvider>
       <CookiesProviderLayout>
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
           <body>
-            {children}
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
           </body>
         </html>
       </CookiesProviderLayout>

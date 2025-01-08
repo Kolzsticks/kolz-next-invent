@@ -63,9 +63,12 @@ export function Header() {
               </DropdownMenuItem>
               <DropdownMenuItem>Profile</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout}>
+              <span onClick={handleLogout}>
+              <DropdownMenuItem >
+              
                 Log out
               </DropdownMenuItem>
+              </span>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
