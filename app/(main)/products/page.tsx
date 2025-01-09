@@ -17,17 +17,17 @@ async function fetchProducts() {
     throw new Error("Failed to fetch products");
   }
 
-  const data = await response.json();
+  const data: Product[] = await response.json();
 
   // Format the date field of each product
-  return data.map((product: Product[]) => ({
+  return data.map((product: Product) => ({
     ...product,
-    date: moment(product.date).format("MMMM D, YYYY h:mm A"), // Example: "January 6, 2025 2:32 PM"
+    date: moment(product.date).format("MMMM D, YYYY h:mm A"), // Format date
   }));
 }
 
 export default async function ProductsPage() {
-  let products = [];
+  let products: Product[] = [];
   let error = null;
 
   try {
@@ -39,8 +39,13 @@ export default async function ProductsPage() {
   return <ProductsClient products={products} error={error} />;
 }
 
-// Client Component
-function ProductsClient({ products, error }) {
+function ProductsClient({
+  products,
+  error,
+}: {
+  products: Product[]; // Array of Product objects
+  error: string | null; // Error can be a string or null
+}) {
   if (error) {
     return <div>Error: {error}</div>; // Display error message
   }
