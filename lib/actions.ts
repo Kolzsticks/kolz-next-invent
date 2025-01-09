@@ -3,6 +3,7 @@
 // lib/actions.ts
 import { db } from "./db";
 import { Prisma } from "@prisma/client";
+import { revalidateTag } from "next/cache";
 
 
 
@@ -77,6 +78,7 @@ export async function updateProduct(id: number, data: {
 }
 // DELETE a product
 export async function deleteProduct(id: number) {
+
   try {
     await db.product.delete({
       where: { id },
@@ -84,6 +86,8 @@ export async function deleteProduct(id: number) {
   } catch (error) {
     throw new Error('Failed to delete product');
   }
+
+  revalidateTag("products");
 }
 
 

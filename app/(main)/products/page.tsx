@@ -10,8 +10,8 @@ import { Product } from "@/types/Product";
 async function fetchProducts() {
   const base_url = process.env.NEXT_PUBLIC_API_URL;
   const response = await fetch(`${base_url}/api/products`, {
-    next: { revalidate: 60 },
-    // cache: 'no-store'
+    // next: { revalidate: 60 },
+    cache: 'no-store'
   });
 
   if (!response.ok) {

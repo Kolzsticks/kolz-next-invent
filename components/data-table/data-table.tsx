@@ -117,9 +117,9 @@ export function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()}
         </div>
-      </div>
+     
 
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="space-x-2">
         <Button
           variant="outline"
           size="sm"
@@ -136,6 +136,7 @@ export function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
         >
           Next
         </Button>
+      </div>
       </div>
     </div>
   );
