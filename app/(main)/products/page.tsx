@@ -1,9 +1,9 @@
 import { columns, DataTable } from "@/components/data-table/data-table";
-
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton"; // Import ShadCN UI Skeleton component
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import * as moment from "moment"; // Import moment for date formatting
 import { Product } from "@/types/Product";
 
 // Server Component
@@ -17,12 +17,18 @@ async function fetchProducts() {
     throw new Error("Failed to fetch products");
   }
 
-  return response.json();
+  const data = await response.json();
+
+  // Format the date field of each product
+  return data.map((product: Product[]) => ({
+    ...product,
+    date: moment(product.date).format("MMMM D, YYYY h:mm A"), // Example: "January 6, 2025 2:32 PM"
+  }));
 }
 
 export default async function ProductsPage() {
-  let products: Product[] = [];
-  let error: string | null = null;
+  let products = [];
+  let error = null;
 
   try {
     products = await fetchProducts();
@@ -34,13 +40,7 @@ export default async function ProductsPage() {
 }
 
 // Client Component
-function ProductsClient({
-  products,
-  error,
-}: {
-  products: Product[];
-  error: string | null;
-}) {
+function ProductsClient({ products, error }) {
   if (error) {
     return <div>Error: {error}</div>; // Display error message
   }
@@ -73,7 +73,7 @@ function ProductsClient({
           </Button>
         </Link>
       </div>
-      <DataTable  columns={columns} data={products} />
+      <DataTable columns={columns} data={products} />
     </div>
   );
 }

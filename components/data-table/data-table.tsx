@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   ColumnDef,
@@ -8,7 +8,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   SortingState,
-} from '@tanstack/react-table';
+} from "@tanstack/react-table";
 import {
   Table,
   TableBody,
@@ -16,14 +16,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { createColumns } from "@/components/data-table/columns";
+import * as moment from 'moment'
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[]; // Column definitions typed to match TData
-  data: TData[];              // Data array typed as TData
+  data: TData[]; // Data array typed as TData
 }
 
 // Example data type
@@ -34,6 +35,7 @@ interface Product {
   price: number;
   venue: string;
   quantity: number;
+  date: string;
 }
 
 export const columns: ColumnDef<Product>[] = createColumns({
@@ -44,13 +46,11 @@ export const columns: ColumnDef<Product>[] = createColumns({
     { accessorKey: "price", header: "Price" },
     { accessorKey: "venue", header: "Venue" },
     { accessorKey: "quantity", header: "Quantity" },
+    { accessorKey: "date", header: "Date",},
   ],
 });
 
-export function DataTable<TData>({
-  columns,
-  data,
-}: DataTableProps<TData>) {
+export function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
