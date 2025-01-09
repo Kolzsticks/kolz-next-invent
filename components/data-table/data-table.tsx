@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { createColumns } from "@/components/data-table/columns";
-import * as moment from 'moment'
+import * as moment from "moment";
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[]; // Column definitions typed to match TData
@@ -46,7 +46,7 @@ export const columns: ColumnDef<Product>[] = createColumns({
     { accessorKey: "price", header: "Price" },
     { accessorKey: "venue", header: "Venue" },
     { accessorKey: "quantity", header: "Quantity" },
-    { accessorKey: "date", header: "Date",},
+    { accessorKey: "date", header: "Date" },
   ],
 });
 
@@ -112,6 +112,13 @@ export function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
           </TableBody>
         </Table>
       </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="flex-1 text-sm text-muted-foreground">
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          {table.getPageCount()}
+        </div>
+      </div>
+
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"
