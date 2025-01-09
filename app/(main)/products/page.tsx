@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton"; // Import ShadCN UI Skeleton component
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import * as moment from "moment"; // Import moment for date formatting
+import moment from "moment"; // Correct way to import moment
 import { Product } from "@/types/Product";
 
 // Server Component
