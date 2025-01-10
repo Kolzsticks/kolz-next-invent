@@ -6,25 +6,7 @@ import { salesColumns } from "@/lib/colume-data";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import { SalePageType } from "@/lib/zod";
-
-const fetchSales = async (): Promise<SalePageType[]> => {
-  try {
-    const base_url = process.env.NEXT_PUBLIC_API_URL;
-    const response = await fetch(`${base_url}/api/sales/views`, {
-      cache: "no-store", // Ensures fresh data is fetched
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`);
-    }
-
-    const data: SalePageType[] = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Failed to fetch sales:", error);
-    throw new Error("Failed to load sales data. Please try again later.");
-  }
-};
+import { fetchSales } from "@/lib/functions";
 
 export default async function SalesPage() {
   let sales: SalePageType[] = [];

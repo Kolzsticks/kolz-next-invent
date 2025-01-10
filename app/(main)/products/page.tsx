@@ -3,30 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton"; // Import ShadCN UI Skeleton component
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import moment from "moment"; // Correct way to import moment
 import { Product } from "@/types/types";
 import { columns } from "@/lib/colume-data";
-
-// Server Component
-async function fetchProducts() {
-  const base_url = process.env.NEXT_PUBLIC_API_URL;
-  const response = await fetch(`${base_url}/api/products`, {
-    // next: { revalidate: 60 },
-    cache: "no-store",
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch products");
-  }
-
-  const data: Product[] = await response.json();
-
-  // Format the date field of each product
-  return data.map((product: Product) => ({
-    ...product,
-    date: moment(product.date).format("MMMM D, YYYY h:mm A"), // Format date
-  }));
-}
+import { fetchProducts } from "@/lib/functions";
 
 export default async function ProductsPage() {
   let products: Product[] = [];

@@ -8,14 +8,7 @@ import { revalidateTag } from "next/cache";
 
 
 
-export async function createProduct(productData: {
-  name: string;
-  category: string;
-  subcategory?: string;
-  price: number;
-  quantity: number;
-  venue?: string;
-}) {
+export async function createProduct(productData: UpdateProductData) {
   if (!productData) {
     throw new Error("Product data is required");
   }
