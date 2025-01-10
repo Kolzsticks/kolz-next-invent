@@ -1,25 +1,37 @@
-'use client';
+"use client";
 
-import { DataTable } from '@/components/data-table/data-table';
-import { createColumns } from '@/components/data-table/columns';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import { DataTable } from "@/components/data-table/data-table";
+import { createColumns } from "@/components/data-table/columns";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 const categories = [
   {
-    id: '1',
-    name: 'Electronics',
-    products: '150',
-    created: '2024-01-15',
+    id: "1",
+    name: "Electronics",
+    products: "150",
+    created: "2024-01-15",
   },
   // Add more sample categories...
 ];
 
 const columns = createColumns({
   columns: [
-    { accessorKey: 'name', header: 'Name' },
-    { accessorKey: 'products', header: 'Products' },
-    { accessorKey: 'created', header: 'Created Date' }
+    {
+      accessorKey: "name",
+      header: "Name",
+      cell: ({ row }) => row.original.name || "N/A",
+    },
+    {
+      accessorKey: "products",
+      header: "Products",
+      cell: ({ row }) => row.original.products || "N/A",
+    },
+    {
+      accessorKey: "created",
+      header: "Created Date",
+      cell: ({ row }) => row.original.created || "N/A",
+    },
   ],
 });
 
