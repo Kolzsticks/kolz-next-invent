@@ -11,19 +11,18 @@ import {
 import Link from "next/link";
 import { toast } from "sonner";
 
-// Making onDelete and editUrl optional in the config
 export function createColumns<T extends Record<string, any>>(config: {
   columns: Array<{
-    accessorKey: keyof T;
+    accessorKey: keyof T | string;
     header: string;
     cell?: (props: { row: { original: T } }) => React.ReactNode;
   }>;
-  onDelete?: (id: number) => Promise<void>; // Optional
-  editUrl?: (id: string) => string; // Optional
+  onDelete?: (id: number) => Promise<void>;
+  editUrl?: (id: string) => string;
 }): ColumnDef<T>[] {
   return [
     ...config.columns.map((col) => ({
-      accessorKey: col.accessorKey as string,
+      accessorKey: col.accessorKey,
       header: col.header,
       cell: col.cell,
     })),
@@ -33,7 +32,7 @@ export function createColumns<T extends Record<string, any>>(config: {
         const handleDelete = async () => {
           if (config.onDelete) {
             try {
-              await config.onDelete(row.original.id); // Call onDelete if provided
+              await config.onDelete(row.original.id);
               toast.success("Item deleted successfully");
             } catch (error) {
               toast.error("Failed to delete item");

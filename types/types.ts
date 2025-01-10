@@ -1,4 +1,12 @@
+import { ColumnDef } from "@tanstack/react-table";
 
+
+export interface DataTableProps<TData> {
+  columns: ColumnDef<TData>[];
+  data: TData[];
+  filterColumn?: string;
+  filterPlaceholder?: string;
+}
 
 export interface Product {
   id: number;
@@ -13,7 +21,7 @@ export interface Product {
 
 
 export interface Sales {
-  id:  number;
+  id: number;
   product_id: number;
   price: number;
   quantity: number;

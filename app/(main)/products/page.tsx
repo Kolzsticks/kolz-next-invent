@@ -1,10 +1,11 @@
-import { columns, DataTable } from "@/components/data-table/data-table";
+import { DataTable } from "@/components/data-table/data-table";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton"; // Import ShadCN UI Skeleton component
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import moment from "moment"; // Correct way to import moment
-import { Product } from "@/types/Product";
+import { Product } from "@/types/types";
+import { columns } from "@/lib/colume-data";
 
 // Server Component
 async function fetchProducts() {
@@ -79,7 +80,12 @@ function ProductsClient({
           </Button>
         </Link>
       </div>
-      <DataTable columns={columns} data={products} />
+      <DataTable
+        columns={columns}
+        data={products}
+        filterColumn="name"
+        filterPlaceholder="Filter products..."
+      />
     </div>
   );
 }

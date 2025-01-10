@@ -36,7 +36,7 @@ import {
 } from "@/components/ui/table";
 import { toast } from "sonner";
 import { saleSchema } from "@/lib/zod";
-import { Product } from "@/types/Product";
+import { Product } from "@/types/types";
 
 type FormValues = z.infer<typeof saleSchema>;
 

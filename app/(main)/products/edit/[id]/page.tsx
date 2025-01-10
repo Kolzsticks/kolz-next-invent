@@ -2,7 +2,11 @@
 import { getAllProducts } from "@/lib/actions";
 import { ProductForm } from "@/components/EditProduct";
 
-export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function EditProductPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const id = Number((await params).id);
   const products = await getAllProducts();
   const product = products.find((p) => p.id === Number(id));
@@ -13,7 +17,6 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
   // Serialize the data by converting to JSON and back
   const serializedProduct = JSON.parse(JSON.stringify(product));
-
 
   return (
     <div className="flex flex-col justify-center items-center m-auto w-full max-w-3xl p-4 sm:p-6 md:p-8">

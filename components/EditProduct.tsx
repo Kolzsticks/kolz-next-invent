@@ -8,18 +8,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { updateProduct } from "@/lib/actions";
 import { useState } from "react";
+import { Product } from "@/types/types";
 
-interface Product {
-  id: number;
-  name: string;
-  category: string;
-  subcategory: string | null;
-  price: number;
-  venue: string | null;
-  quantity: number;
-  image_url?: string | null;
-  date?: Date | null;
-}
+
 
 export function ProductForm({ product }: { product: Product }) {
   const router = useRouter();

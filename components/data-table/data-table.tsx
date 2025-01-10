@@ -1,12 +1,18 @@
 "use client";
+
+import * as React from "react";
 import {
   ColumnDef,
+  ColumnFiltersState,
+  SortingState,
   flexRender,
+  VisibilityState,
   getCoreRowModel,
+  getFilteredRowModel,
   useReactTable,
   getPaginationRowModel,
   getSortedRowModel,
-  SortingState,
+  FilterFn,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -18,103 +24,106 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { createColumns } from "@/components/data-table/columns";
-import { Product } from "@/types/Product";
-import { SalePageType } from "@/lib/zod";
-import { deleteProduct, deleteSale } from "@/lib/actions";
+import { Input } from "../ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
+import { DataTableProps } from "@/types/types";
 
-interface DataTableProps<TData> {
-  columns: ColumnDef<TData>[]; // Column definitions typed to match TData
-  data: TData[]; // Data array typed as TData
-}
+// Helper function to get nested object value using dot notation
+const getNestedValue = (obj: any, path: string) => {
+  return path.split(".").reduce((acc, part) => acc && acc[part], obj);
+};
 
-export const columns: ColumnDef<Product>[] = createColumns({
-  columns: [
-    {
-      accessorKey: "name",
-      header: "Name",
-      cell: ({ row }) => row.original.name || "N/A",
-    },
-    {
-      accessorKey: "category",
-      header: "Category",
-      cell: ({ row }) => row.original.category || "N/A",
-    },
-    {
-      accessorKey: "subcategory",
-      header: "Subcategory",
-      cell: ({ row }) => row.original.subcategory || "N/A",
-    }, // Handle undefined values
-    {
-      accessorKey: "price",
-      header: "Price",
-      cell: ({ row }) => row.original.price || "N/A",
-    },
-    {
-      accessorKey: "venue",
-      header: "Venue",
-      cell: ({ row }) => row.original.venue || "N/A",
-    },
-    {
-      accessorKey: "quantity",
-      header: "Quantity",
-      cell: ({ row }) => row.original.quantity || "N/A",
-    },
-    {
-      accessorKey: "date",
-      header: "Date",
-      cell: ({ row }) => row.original.date || "N/A",
-    },
-  ],
-  onDelete: deleteProduct,
-  editUrl: (id) => `/products/edit/${id}`,
-});
-
-export const salesColumns: ColumnDef<SalePageType>[] = createColumns({
-  columns: [
-    {
-      accessorKey: "product",
-      header: "Product Name",
-      cell: ({ row }) => row.original.product?.name || "N/A",
-    },
-    {
-      accessorKey: "quantity",
-      header: "Quantity",
-      cell: ({ row }) => row.original.quantity,
-    },
-    {
-      accessorKey: "price",
-      header: "Sale Price",
-      cell: ({ row }) => row.original.price,
-    },
-    {
-      accessorKey: "date",
-      header: "Sale Date",
-      cell: ({ row }) => row.original.date,
-    },
-    
-  ],
-  onDelete: deleteSale,
-  editUrl: (id) => `/sales/edit/${id}`,
-});
-
-export function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
+export function DataTable<TData>({
+  columns,
+  data,
+  filterColumn = "name",
+  filterPlaceholder = "Filter...",
+}: DataTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
+
+  // Custom filter function that handles nested fields
+  const nestedFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
+    const value = getNestedValue(row.original, columnId);
+    return String(value)
+      .toLowerCase()
+      .includes(String(filterValue).toLowerCase());
+  };
 
   const table = useReactTable({
     data,
     columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    onSortingChange: setSorting,
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+    },
+    filterFns: {
+      nested: nestedFilterFn,
     },
   });
 
+  // Get the column for filtering, fallback to first column if not found
+  const filterableColumn = table.getColumn(filterColumn);
+
   return (
-    <div>
+    <div className="w-full">
+      <div className="flex items-center py-4">
+        <Input
+          placeholder={filterPlaceholder}
+          value={(filterableColumn?.getFilterValue() as string) ?? ""}
+          onChange={(event) => {
+            filterableColumn?.setFilterValue(event.target.value);
+          }}
+          className="max-w-sm"
+        />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto">
+              Columns <ChevronDown />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -165,7 +174,6 @@ export function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()}
         </div>
-
         <div className="space-x-2">
           <Button
             variant="outline"
