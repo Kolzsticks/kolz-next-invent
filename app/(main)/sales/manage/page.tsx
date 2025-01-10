@@ -62,7 +62,7 @@ export default async function SalesPage() {
           {/* Header */}
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-2xl font-semibold">Sales</h1>
-            <Link href="/sales/add">
+            <Link href="/sales/add" className="mt-2">
               <Button>
                 <Plus className="mr-2 h-4 w-4" /> Add Sale
               </Button>
@@ -72,9 +72,10 @@ export default async function SalesPage() {
           {/* Total Sales */}
           <p className="mb-4">
             Total Sales:{" "}
-            {new Intl.NumberFormat("en-US", {
+            {new Intl.NumberFormat("en-NG", {
               style: "currency",
-              currency: "USD",
+              currency: "NGN",
+              minimumFractionDigits: 2,
             }).format(totalSales)}
           </p>
 
