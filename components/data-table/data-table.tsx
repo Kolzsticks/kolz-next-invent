@@ -1,5 +1,4 @@
 "use client";
-
 import {
   ColumnDef,
   flexRender,
@@ -20,34 +19,87 @@ import {
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { createColumns } from "@/components/data-table/columns";
-import * as moment from "moment";
+import { Product } from "@/types/Product";
+import { SalePageType } from "@/lib/zod";
+import { deleteProduct, deleteSale } from "@/lib/actions";
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[]; // Column definitions typed to match TData
   data: TData[]; // Data array typed as TData
 }
 
-// Example data type
-interface Product {
-  name: string;
-  category: string;
-  subcategory?: string;
-  price: number;
-  venue: string;
-  quantity: number;
-  date: string;
-}
-
 export const columns: ColumnDef<Product>[] = createColumns({
   columns: [
-    { accessorKey: "name", header: "Name" },
-    { accessorKey: "category", header: "Category" },
-    { accessorKey: "subcategory", header: "Subcategory" }, // Handle undefined values
-    { accessorKey: "price", header: "Price" },
-    { accessorKey: "venue", header: "Venue" },
-    { accessorKey: "quantity", header: "Quantity" },
-    { accessorKey: "date", header: "Date" },
+    {
+      accessorKey: "name",
+      header: "Name",
+      cell: ({ row }) => row.original.name || "N/A",
+    },
+    {
+      accessorKey: "category",
+      header: "Category",
+      cell: ({ row }) => row.original.category || "N/A",
+    },
+    {
+      accessorKey: "subcategory",
+      header: "Subcategory",
+      cell: ({ row }) => row.original.subcategory || "N/A",
+    }, // Handle undefined values
+    {
+      accessorKey: "price",
+      header: "Price",
+      cell: ({ row }) => row.original.price || "N/A",
+    },
+    {
+      accessorKey: "venue",
+      header: "Venue",
+      cell: ({ row }) => row.original.venue || "N/A",
+    },
+    {
+      accessorKey: "quantity",
+      header: "Quantity",
+      cell: ({ row }) => row.original.quantity || "N/A",
+    },
+    {
+      accessorKey: "date",
+      header: "Date",
+      cell: ({ row }) => row.original.date || "N/A",
+    },
   ],
+  onDelete: deleteProduct,
+  editUrl: (id) => `/products/edit/${id}`,
+});
+
+export const salesColumns: ColumnDef<SalePageType>[] = createColumns({
+  columns: [
+    {
+      accessorKey: "product",
+      header: "Product Name",
+      cell: ({ row }) => row.original.product?.name || "N/A",
+    },
+    {
+      accessorKey: "quantity",
+      header: "Quantity",
+      cell: ({ row }) => row.original.quantity,
+    },
+    {
+      accessorKey: "price",
+      header: "Sale Price",
+      cell: ({ row }) => row.original.price,
+    },
+    {
+      accessorKey: "date",
+      header: "Sale Date",
+      cell: ({ row }) => row.original.date,
+    },
+    {
+      accessorKey: "product",
+      header: "Category",
+      cell: ({ row }) => row.original.product?.category || "N/A",
+    },
+  ],
+  onDelete: deleteSale,
+  editUrl: (id) => `/sales/edit/${id}`,
 });
 
 export function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
@@ -117,26 +169,25 @@ export function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()}
         </div>
-     
 
-      <div className="space-x-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-      </div>
+        <div className="space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   );

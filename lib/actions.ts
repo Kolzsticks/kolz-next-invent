@@ -22,7 +22,7 @@ export async function createProduct(productData: {
   try {
     // Create the new product in the database
 
-    const newProduct = await db.product.create({  
+    const newProduct = await db.product.create({
       data: productData,
     });
     return newProduct;
@@ -32,6 +32,16 @@ export async function createProduct(productData: {
   }
 }
 
+
+
+export async function getAllSales() {
+  try {
+    const sales = await db.sales.findMany();
+    return sales;
+  } catch (error) {
+    throw new Error('Failed to fetch sales');
+  }
+}
 
 
 
@@ -89,6 +99,20 @@ export async function deleteProduct(id: number) {
 
   revalidateTag("products");
 }
+
+
+export async function deleteSale(id: number) {
+  try {
+    await db.sales.delete({
+      where: { id },
+    });
+  } catch (error) {
+    throw new Error('Failed to delete sale');
+  }
+
+  revalidateTag("sales");
+}
+
 
 
 
