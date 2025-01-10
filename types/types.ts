@@ -27,3 +27,7 @@ export interface Sales {
   quantity: number;
   date: string;
 }
+
+
+export // Omit 'id' and 'date' since they shouldn't be updated
+  type UpdateProductData = Omit<Product, 'id' | 'date'>;

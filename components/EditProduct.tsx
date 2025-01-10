@@ -18,42 +18,46 @@ export function ProductForm({ product }: { product: Product }) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true); // Start loading
+    setLoading(true);
     const formData = new FormData(e.currentTarget);
-
+  
     const price = formData.get("price");
     const quantity = formData.get("quantity");
-
-    // Type safety checks
-    if (!price || !quantity) {
-      toast.error("Price and quantity are required");
+    const name = formData.get("name");
+    const category = formData.get("category");
+  
+    // More thorough validation
+    if (!name || !category || !price || !quantity) {
+      toast.error("Please fill in all required fields");
+      setLoading(false);
       return;
     }
-
+  
     try {
       const updatedProduct = {
-        name: formData.get("name") as string,
-        category: formData.get("category") as string,
-        subcategory: (formData.get("subcategory") as string) || null,
+        name: name as string,
+        category: category as string,
+        subcategory: formData.get("subcategory") as string || "",
         price: parseFloat(price as string),
-        venue: (formData.get("venue") as string) || null,
+        venue: formData.get("venue") as string || "",
         quantity: parseInt(quantity as string),
       };
-
-      // Additional validation
+  
       if (isNaN(updatedProduct.price) || isNaN(updatedProduct.quantity)) {
         toast.error("Invalid price or quantity value");
+        setLoading(false);
         return;
       }
-
+  
       await updateProduct(product.id, updatedProduct);
-
       toast.success("Product updated successfully!");
+      router.refresh(); // Add this to refresh the page data
+      router.push('/products'); // Optionally redirect after success
     } catch (error) {
       toast.error("Failed to update product. Please try again.");
       console.error(error);
     } finally {
-      setLoading(false); // End loading
+      setLoading(false);
     }
   };
 

@@ -1,5 +1,6 @@
 'use server'
 
+import { Product, UpdateProductData } from "@/types/types";
 // lib/actions.ts
 import { db } from "./db";
 import { Prisma } from "@prisma/client";
@@ -57,35 +58,24 @@ export async function getAllProducts() {
 
 
 
-interface UpdateProductData {
-  name: string;
-  category: string;
-  subcategory: string | null;
-  price: number;
-  venue: string | null;
-  quantity: number;
+
+export async function updateProduct(id: number, data: UpdateProductData) {
+  const formattedData = {
+    ...data,
+    price: new Prisma.Decimal(data.price)
+  };
+
+  const updatedProduct = await db.product.update({
+    where: { id },
+    data: formattedData
+  });
+
+  // Serialize the response
+  return JSON.parse(JSON.stringify(updatedProduct));
 }
 
-export async function updateProduct(id: number, data: {
-  name: string;
-  category: string;
-  subcategory: string | null;
-  price: number;
-  venue: string | null;
-  quantity: number;
-}) {
-  return await db.product.update({
-    where: { id },
-    data: {
-      name: data.name,
-      category: data.category,
-      subcategory: data.subcategory,
-      price: data.price ? new Prisma.Decimal(data.price.toString()) : undefined, // Convert to string first
-      venue: data.venue,
-      quantity: data.quantity
-    },
-  });
-}
+
+
 // DELETE a product
 export async function deleteProduct(id: number) {
 
