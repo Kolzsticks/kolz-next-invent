@@ -11,14 +11,15 @@ import {
 import Link from "next/link";
 import { toast } from "sonner";
 
+// Making onDelete and editUrl optional in the config
 export function createColumns<T extends Record<string, any>>(config: {
   columns: Array<{
     accessorKey: keyof T;
     header: string;
-    cell: (props: { row: { original: T } }) => React.ReactNode;
+    cell?: (props: { row: { original: T } }) => React.ReactNode;
   }>;
-  onDelete: (id: number) => Promise<void>;
-  editUrl: (id: string) => string;
+  onDelete?: (id: number) => Promise<void>; // Optional
+  editUrl?: (id: string) => string; // Optional
 }): ColumnDef<T>[] {
   return [
     ...config.columns.map((col) => ({
@@ -30,11 +31,13 @@ export function createColumns<T extends Record<string, any>>(config: {
       id: "actions",
       cell: ({ row }) => {
         const handleDelete = async () => {
-          try {
-            await config.onDelete(row.original.id);
-            toast.success("Item deleted successfully");
-          } catch (error) {
-            toast.error("Failed to delete item");
+          if (config.onDelete) {
+            try {
+              await config.onDelete(row.original.id); // Call onDelete if provided
+              toast.success("Item deleted successfully");
+            } catch (error) {
+              toast.error("Failed to delete item");
+            }
           }
         };
 
@@ -46,9 +49,11 @@ export function createColumns<T extends Record<string, any>>(config: {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <Link href={config.editUrl(row.original.id)}>
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-              </Link>
+              {config.editUrl && (
+                <Link href={config.editUrl(row.original.id)}>
+                  <DropdownMenuItem>Edit</DropdownMenuItem>
+                </Link>
+              )}
               <span onClick={handleDelete}>
                 <DropdownMenuItem className="text-destructive">
                   Delete

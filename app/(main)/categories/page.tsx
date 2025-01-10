@@ -19,7 +19,7 @@ const columns = createColumns({
   columns: [
     { accessorKey: 'name', header: 'Name' },
     { accessorKey: 'products', header: 'Products' },
-    { accessorKey: 'created', header: 'Created Date' },
+    { accessorKey: 'created', header: 'Created Date' }
   ],
 });
 

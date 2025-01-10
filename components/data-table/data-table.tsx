@@ -92,11 +92,7 @@ export const salesColumns: ColumnDef<SalePageType>[] = createColumns({
       header: "Sale Date",
       cell: ({ row }) => row.original.date,
     },
-    {
-      accessorKey: "product",
-      header: "Category",
-      cell: ({ row }) => row.original.product?.category || "N/A",
-    },
+    
   ],
   onDelete: deleteSale,
   editUrl: (id) => `/sales/edit/${id}`,
