@@ -93,7 +93,7 @@ export default function AddSalePage() {
     append({
       id: product.id,
       name: product.name,
-      quantity: "1",
+      quantity: 1,
       price: product.price?.toString() || "0",
     });
     setQuery("");
