@@ -2,7 +2,7 @@
 
 import { DataTable } from "@/components/data-table/data-table";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Calendar as CalendarIcon, X } from "lucide-react";
 import Link from "next/link";
 import { salesColumns } from "@/lib/colume-data";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,12 +12,18 @@ import { getAllSales } from "@/lib/actions";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 export default function SalesPage() {
   const [sales, setSales] = useState<SalePageType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [date, setDate] = useState<Date | undefined>(undefined);
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
   // Function to fetch all sales
   const fetchAllSales = async () => {
@@ -56,12 +62,16 @@ export default function SalesPage() {
   // Handle date selection
   const handleDateSelect = (newDate: Date | undefined) => {
     setDate(newDate);
+    setCalendarOpen(false);
     if (newDate) {
       fetchSalesByDate(newDate);
-    } else {
-      // If date is cleared, fetch all sales
-      fetchAllSales();
     }
+  };
+
+  // Handle clear filter
+  const handleClearFilter = () => {
+    setDate(undefined);
+    fetchAllSales();
   };
 
   if (error) {
@@ -87,33 +97,41 @@ export default function SalesPage() {
     <div className="container mx-auto mt-10">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold">Sales</h1>
-        <Link href="/sales/add" className="mt-2">
-          <Button>
-            <Plus className="mr-2 h-4 w-4 font-bold text-2xl" /> Add Sale
-          </Button>
-        </Link>
-      </div>
-
-      {/* Calendar Section */}
-      <div className="mb-6">
-        <div className="flex items-center gap-4 mb-2">
-          <h2 className="text-lg font-medium">Filter by Date</h2>
-          {date && (
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => handleDateSelect(undefined)}
-            >
-              Show All Sales
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
+            <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="flex items-center gap-2">
+                  <CalendarIcon className="h-4 w-4" />
+                  {date ? format(date, 'PPP') : 'Filter by Date'}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="end">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={handleDateSelect}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+            {date && (
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={handleClearFilter}
+                className="h-9 w-9"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+          <Link href="/sales/add" className="ml-2">
+            <Button>
+              <Plus className="mr-2 h-4 w-4" /> Add Sale
             </Button>
-          )}
+          </Link>
         </div>
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={handleDateSelect}
-          className="rounded-md border"
-        />
       </div>
 
       {/* Total Sales */}

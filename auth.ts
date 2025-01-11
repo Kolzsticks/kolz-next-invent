@@ -75,7 +75,7 @@ export const config: NextAuthConfig = {
         // @ts-ignore
         session.user.accessToken = token.accessToken;
       }
-      console.log(session);
+      // console.log(session);
       return session;
     },
   },

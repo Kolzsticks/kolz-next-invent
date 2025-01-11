@@ -71,25 +71,39 @@ export const getAllSales = async (date?: string): Promise<SalePageType[]> => {
 
 
 
-export async function getAllProducts(): Promise<Product[]> {
+
+export async function getAllProducts(date?: string): Promise<Product[]> {
   try {
-    const products = await db.product.findMany();
+    // Create date filter if date is provided
+    const dateFilter = date ? {
+      date: {
+        gte: new Date(`${date}T00:00:00.000Z`),
+        lt: new Date(`${date}T23:59:59.999Z`),
+      }
+    } : {};
+
+    const products = await db.product.findMany({
+      where: dateFilter,
+      orderBy: {
+        date: 'desc',
+      },
+    });
 
     // Format the products with a formatted date
     const formattedProducts: Product[] = products.map((product) => ({
       id: product.id,
       name: product.name,
       category: product.category,
-      subcategory: product.subcategory ?? undefined, // Handle null to match optional type
-      price: Number(product.price), // Ensure price is a number if Decimal type
-      venue: product.venue ?? "Unknown", // Fallback for venue if null
+      subcategory: product.subcategory ?? undefined,
+      price: Number(product.price),
+      venue: product.venue ?? "Unknown",
       quantity: product.quantity,
-      date: moment(product.date).format("MMMM D, YYYY h:mm A"), // Format date
+      date: moment(product.date).format("MMMM D, YYYY h:mm A"),
     }));
 
     return formattedProducts;
   } catch (error) {
-    console.error("Error fetching products:", error); // Debug log for errors
+    console.error("Error fetching products:", error);
     throw new Error("Failed to fetch products");
   }
 }
