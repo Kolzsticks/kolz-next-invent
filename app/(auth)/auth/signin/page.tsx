@@ -38,24 +38,24 @@ export default function SignIn() {
     try {
       setIsLoading(true);
       setGlobalError("");
-  
+
       const response = await signIn("credentials", {
         username: values.username,
         password: values.password,
         redirect: false,
       });
-  
+
       console.log("SignIn response:", response); // Debug log
-  
+
       if (response?.error) {
         setGlobalError(
-          response.error === "CredentialsSignin" 
-            ? "Invalid username or password" 
+          response.error === "CredentialsSignin"
+            ? "Invalid username or password"
             : response.error
         );
         return;
       }
-  
+
       if (response?.ok) {
         router.push("/dashboard");
         router.refresh();

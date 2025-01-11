@@ -5,14 +5,14 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Product } from "@/types/types";
 import { columns } from "@/lib/colume-data";
-import { fetchProducts } from "@/lib/functions";
+import { getAllProducts } from "@/lib/actions";
 
 export default async function ProductsPage() {
   let products: Product[] = [];
   let error = null;
 
   try {
-    products = await fetchProducts();
+    products = await getAllProducts();
   } catch (err) {
     error = err instanceof Error ? err.message : "An unknown error occurred";
   }

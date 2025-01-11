@@ -12,11 +12,11 @@ export interface Product {
   id: number;
   name: string;
   category: string;
-  subcategory?: string;
+  subcategory?: string; // Optional property
   price: number;
   venue: string;
   quantity: number;
-  date: string;
+  date: string; // Date as a formatted string
 }
 
 

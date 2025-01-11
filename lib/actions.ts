@@ -5,6 +5,8 @@ import { Product, UpdateProductData } from "@/types/types";
 import { db } from "./db";
 import { Prisma } from "@prisma/client";
 import { revalidateTag } from "next/cache";
+import moment from "moment"; // Correct way to import moment
+import { SalePageType } from "./zod";
 
 
 
@@ -28,24 +30,67 @@ export async function createProduct(productData: UpdateProductData) {
 
 
 
-export async function getAllSales() {
+export const getAllSales = async (date?: string): Promise<SalePageType[]> => {
   try {
-    const sales = await db.sales.findMany();
-    return sales;
+    // Create date filter if date is provided
+    const dateFilter = date ? {
+      date: {
+        gte: new Date(`${date}T00:00:00.000Z`),
+        lt: new Date(`${date}T23:59:59.999Z`),
+      }
+    } : {};
+
+    const sales = await db.sales.findMany({
+      where: dateFilter,
+      include: {
+        product: true, // Fetch related product data
+      },
+      orderBy: {
+        date: 'desc', // Optional: Order by date descending
+      },
+    });
+
+    // Format sales and return
+    return sales.map((sale) => ({
+      ...sale,
+      date: moment(sale.date).format("MMMM D, YYYY h:mm A"), // Format date
+      price: parseFloat(sale.price.toString()), // Convert Prisma.Decimal to number
+      product: {
+        ...sale.product,
+        subcategory: sale.product.subcategory ?? null, // Handle nullable subcategory
+        venue: sale.product.venue ?? null, // Handle nullable venue
+        image_url: sale.product.image_url ?? null, // Handle nullable image_url
+        price: parseFloat(sale.product.price.toString()), // Convert Prisma.Decimal to number
+      },
+    }));
   } catch (error) {
-    throw new Error('Failed to fetch sales');
+    console.error("Error fetching sales:", error);
+    throw new Error("Failed to fetch sales");
   }
-}
+};
 
 
 
-// READ all products
-export async function getAllProducts() {
+export async function getAllProducts(): Promise<Product[]> {
   try {
     const products = await db.product.findMany();
-    return products;
+
+    // Format the products with a formatted date
+    const formattedProducts: Product[] = products.map((product) => ({
+      id: product.id,
+      name: product.name,
+      category: product.category,
+      subcategory: product.subcategory ?? undefined, // Handle null to match optional type
+      price: Number(product.price), // Ensure price is a number if Decimal type
+      venue: product.venue ?? "Unknown", // Fallback for venue if null
+      quantity: product.quantity,
+      date: moment(product.date).format("MMMM D, YYYY h:mm A"), // Format date
+    }));
+
+    return formattedProducts;
   } catch (error) {
-    throw new Error('Failed to fetch products');
+    console.error("Error fetching products:", error); // Debug log for errors
+    throw new Error("Failed to fetch products");
   }
 }
 

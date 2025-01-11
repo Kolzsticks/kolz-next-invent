@@ -8,8 +8,6 @@ import CombinedCharts from "@/components/data-table/combined-charts";
 import CookieChecker from "@/components/CheckCookie";
 import { useSession } from "next-auth/react";
 
-
-
 const highestSellingProducts = [
   { id: 1, product: "Product A", sales: "500", revenue: "$25,000" },
   { id: 2, product: "Product B", sales: "300", revenue: "$15,000" },
@@ -77,13 +75,13 @@ const columnsConfig = {
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
-  console.log(session?.user)
+  console.log(session?.user);
 
   return (
     <div className="space-y-16">
-       <h2 className="text-2xl font-bold">
-            Welcome back, {session?.user?.username || 'Guest'}
-          </h2>
+      <h2 className="text-2xl font-bold">
+        Welcome back, {session?.user?.username || "Guest"}
+      </h2>
       {/* Overview Cards */}
       <CookieChecker />
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
