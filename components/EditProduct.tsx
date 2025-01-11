@@ -153,7 +153,7 @@ export function ProductForm({ product }: { product: Product }) {
             )}
           </Button>
 
-          <Link href="/products">
+          <Link href="/products" prefetch={true}>
             <Button type="button" variant="outline">
               Back to Products List
             </Button>

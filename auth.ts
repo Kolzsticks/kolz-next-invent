@@ -1,96 +1,85 @@
-import NextAuth, { User } from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
-import { signInSchema } from './lib/zod';
-import { cookies } from 'next/headers';
+import type { NextAuthConfig } from "next-auth";
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+async function login(credentials: any) {
+  try {
+    const base_url = process.env.NEXT_PUBLIC_API_URL
+    const response = await fetch(`${base_url}/api/user`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(credentials)
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to authenticate');
+    }
+
+    const res = await response.json();
+
+    return {
+      id: res.user.id,
+      name: res.user.name || res.user.username, // fallback to username if name isn't available
+      username: res.user.username,
+      role: res.user.role,
+      accessToken: res.user.access_token,
+    };
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : "Something went wrong.");
+  }
+}
+export const config: NextAuthConfig = {
+  pages: { signIn: "/auth/signin" },
   providers: [
-    Credentials({
-      async authorize(credentials): Promise<User | null> {
-        // Validate credentials with Zod
-        const parsedCredentials = signInSchema.safeParse(credentials);
-        if (!parsedCredentials.success) {
-          console.error('Invalid credentials:', parsedCredentials.error.errors);
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        username: { label: "Username", type: "text", placeholder: "enter username" },
+        password: { label: "Password", type: "password", placeholder: "******" }
+      },
+      async authorize(credentials) {
+        if (!credentials?.username || !credentials?.password) {
           return null;
         }
 
         try {
-          // Call the external API for login
-          const live_url = process.env.NEXT_PUBLIC_API_URL;
-          const response = await fetch(
-            `${live_url}/api/user`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                username: credentials.username,
-                password: credentials.password,
-              }),
-            }
-          );
-
-          if (!response.ok) {
-            const errorData = await response.json();
-            console.error('API Error:', errorData.message);
-            return null;
-          }
-
-          const data = await response.json();
-          console.log(data)
-
-          // Successful login, map the token and email to a User object
-          if (data.user.username) {
-            return {
-              id: data.access_token, // Required User field
-              email: credentials.email, // Required User field
-            } as User; // Ensure it conforms to the User type
-          }
-
-          return null;
-        } catch (error) {
-          console.error('Login error:', error);
+          const user = await login(credentials);
+          // console.log(user)
+          return user;
+        } catch (e) {
+          console.error('Authentication error:', e);
           return null;
         }
       },
     }),
   ],
   callbacks: {
-    // Set the cookie when a user signs in via either provider
     async jwt({ token, user }) {
       if (user) {
-        // Add the user information to the token
-        token.id = user.id as string;
-
-        // Set a cookie after successful login
-        const expiresAt = new Date();
-        expiresAt.setMinutes(expiresAt.getMinutes() + 10); // Cookie expires in 10 minutes
-        (await cookies()).set('loggedin', 'true', { expires: expiresAt });
+        token.id = user.id;
+        token.username = user.username;
+        token.role = user.role;
+        token.accessToken = user.accessToken;
       }
       return token;
     },
-
     async session({ session, token }) {
-      // Store the access token in the session object
-      session.user.id = token.id;
+      if (token && session.user) {
+        session.user.id = token.id;
+        session.user.username = token.username;
+        session.user.role = token.role;
+        // @ts-ignore
+        session.user.accessToken = token.accessToken;
+      }
+      console.log(session);
       return session;
     },
-
-    authorized({ request: { nextUrl }, auth }) {
-      const isLoggedIn = !!auth?.user;
-      const { pathname } = nextUrl;
-
-      if (pathname.startsWith('/auth/signin') && isLoggedIn) {
-        // Redirect logged-in users away from the signin page
-        return Response.redirect(new URL('/dashboard', nextUrl));
-      }
-
-      return !!auth; // Return whether the user is authorized
-    },
   },
-  pages: {
-    signIn: '/auth/signin', // Custom sign-in page
-  },
-});
+  debug: process.env.NODE_ENV === "development",
+};
+
+export const { handlers, auth, signIn, signOut } = NextAuth(config);

@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
+import { SignJWT } from "jose";
+
+const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET);
 
 export async function POST(req: Request) {
   try {
     const { username, password } = await req.json();
+
+    console.log("API received request:", { username }); // Debug log
 
     if (!username || !password) {
       return NextResponse.json(
@@ -17,26 +22,48 @@ export async function POST(req: Request) {
       where: { username },
     });
 
+    console.log("Found user:", user ? "yes" : "no"); // Debug log
+
     if (!user) {
-      console.log("User not found"); // Debug log
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Invalid credentials" }, 
+        { status: 401 }
+      );
     }
 
-    // console.log("Stored password hash:", user.password); // Debug log
-
-    // Compare the plaintext password with the hashed password
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    // console.log("Password comparison result:", isPasswordValid); // Debug log
+    console.log("Password valid:", isPasswordValid); // Debug log
 
     if (!isPasswordValid) {
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+      return NextResponse.json(
+        { error: "Invalid credentials" }, 
+        { status: 401 }
+      );
     }
+
+    const token = await new SignJWT({ 
+      id: user.id, 
+      username: user.username,
+      role: user.role 
+    })
+      .setProtectedHeader({ alg: "HS256" })
+      .setIssuedAt()
+      .setExpirationTime("1h")
+      .sign(SECRET_KEY);
 
     const { password: _, ...userWithoutPassword } = user;
 
-    return NextResponse.json({ user: userWithoutPassword });
+    console.log(user); // Debug log
+    return NextResponse.json({
+      success: true,
+      user: {
+        ...userWithoutPassword,
+        access_token: token,
+      }
+    });
   } catch (error: any) {
+    console.error("API error:", error); // Debug log
     return NextResponse.json(
       { error: "An error occurred", details: error.message },
       { status: 500 }

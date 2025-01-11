@@ -6,23 +6,9 @@ import { DataTable } from "@/components/data-table/data-table";
 import { createColumns } from "@/components/data-table/columns";
 import CombinedCharts from "@/components/data-table/combined-charts";
 import CookieChecker from "@/components/CheckCookie";
+import { useSession } from "next-auth/react";
 
-const salesData = [
-  { name: "Jan", value: 400 },
-  { name: "Feb", value: 300 },
-  { name: "Mar", value: 600 },
-  { name: "Apr", value: 800 },
-  { name: "May", value: 500 },
-  { name: "Jun", value: 700 },
-];
 
-const productData = [
-  { name: "Electronics", value: 40 },
-  { name: "Clothing", value: 30 },
-  { name: "Books", value: 20 },
-  { name: "Food", value: 27 },
-  { name: "Sports", value: 18 },
-];
 
 const highestSellingProducts = [
   { id: 1, product: "Product A", sales: "500", revenue: "$25,000" },
@@ -90,8 +76,14 @@ const columnsConfig = {
 };
 
 export default function DashboardPage() {
+  const { data: session, status } = useSession();
+  console.log(session?.user)
+
   return (
     <div className="space-y-16">
+       <h2 className="text-2xl font-bold">
+            Welcome back, {session?.user?.username || 'Guest'}
+          </h2>
       {/* Overview Cards */}
       <CookieChecker />
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -150,10 +142,10 @@ export default function DashboardPage() {
             <CardTitle>Highest Selling Products</CardTitle>
           </CardHeader>
           <CardContent>
-            <DataTable
+            {/* <DataTable
               columns={columnsConfig.highestSellingProducts}
               data={highestSellingProducts}
-            />
+            /> */}
           </CardContent>
         </Card>
         <Card>
@@ -161,7 +153,7 @@ export default function DashboardPage() {
             <CardTitle>Latest Sales</CardTitle>
           </CardHeader>
           <CardContent>
-            <DataTable columns={columnsConfig.latestSales} data={latestSales} />
+            {/* <DataTable columns={columnsConfig.latestSales} data={latestSales}/> */}
           </CardContent>
         </Card>
         <Card>
@@ -169,10 +161,10 @@ export default function DashboardPage() {
             <CardTitle>Recently Added Products</CardTitle>
           </CardHeader>
           <CardContent>
-            <DataTable
+            {/* <DataTable
               columns={columnsConfig.recentlyAddedProducts}
               data={recentlyAddedProducts}
-            />
+            /> */}
           </CardContent>
         </Card>
       </div>

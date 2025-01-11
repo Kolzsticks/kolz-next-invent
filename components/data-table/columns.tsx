@@ -49,7 +49,7 @@ export function createColumns<T extends Record<string, any>>(config: {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               {config.editUrl && (
-                <Link href={config.editUrl(row.original.id)}>
+                <Link href={config.editUrl(row.original.id)} prefetch={true}>
                   <DropdownMenuItem>Edit</DropdownMenuItem>
                 </Link>
               )}

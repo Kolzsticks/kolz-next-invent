@@ -31,3 +31,25 @@ export interface Sales {
 
 export // Omit 'id' and 'date' since they shouldn't be updated
   type UpdateProductData = Omit<Product, 'id' | 'date'>;
+
+
+
+  // types.ts
+export interface UserCredentials {
+  username: string;
+  password: string;
+}
+
+export interface APIResponse {
+  success: boolean;
+  access_token: string;
+  username: string;
+  role: string;
+  message?: string;
+}
+
+export interface RealUser {
+  id: string;
+  username: string;
+  role: string;
+}

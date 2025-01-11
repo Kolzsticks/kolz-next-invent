@@ -18,7 +18,12 @@ import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 
 const sidebarLinks = [
-  { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard", color: "text-blue-500" },
+  {
+    href: "/dashboard",
+    icon: LayoutDashboard,
+    label: "Dashboard",
+    color: "text-blue-500",
+  },
   {
     label: "Products",
     icon: Package,
@@ -46,21 +51,40 @@ const sidebarLinks = [
       { href: "/sales/add", label: "Add Sales" },
     ],
   },
-  { href: "/categories", icon: Layers, label: "Categories", color: "text-red-500" },
-  { href: "/media", icon: Cloud, label: "Media Library", color: "text-yellow-500" },
-  { href: "/reports", icon: BarChart2, label: "Reports", color: "text-teal-500" },
+  {
+    href: "/categories",
+    icon: Layers,
+    label: "Categories",
+    color: "text-red-500",
+  },
+  {
+    href: "/media",
+    icon: Cloud,
+    label: "Media Library",
+    color: "text-yellow-500",
+  },
+  {
+    href: "/reports",
+    icon: BarChart2,
+    label: "Reports",
+    color: "text-teal-500",
+  },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>(
     {}
   );
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      setIsCollapsed(mobile); // Collapse on mobile, expand on larger screens
+    };
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -131,6 +155,7 @@ export function Sidebar() {
                 <div className="ml-8 border-l-2 border-muted pl-4 space-y-1 transition-all duration-300">
                   {link.children.map((child) => (
                     <Link
+                      prefetch={true}
                       key={child.href}
                       href={child.href}
                       onClick={handleLinkClick}
@@ -148,6 +173,7 @@ export function Sidebar() {
             </div>
           ) : (
             <Link
+              prefetch={true}
               key={link.href}
               href={link.href}
               onClick={handleLinkClick}

@@ -1,16 +1,14 @@
 
 import { object, string } from "zod";
 import * as z from "zod";
-import { ColumnDef } from "@tanstack/react-table";
 
 
 
-export const signInSchema = object({
-  username: string({ required_error: "Email is required" }).min(1, "Username is required"),
-  password: string({ required_error: "Password is required" })
-    .min(1, "Password is required")
+
+export const signInSchema = z.object({
+  username: z.string().min(1, "Username is required"),
+  password: z.string().min(1, "Password is required"),
 });
-
 
 
 export const productSchema = z.object({

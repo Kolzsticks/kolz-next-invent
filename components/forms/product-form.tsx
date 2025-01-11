@@ -62,7 +62,7 @@ export function ProductForm() {
         toast.success(
           <div>
             Product added successfully.{" "}
-            <Link href="/products" className="text-blue-500 underline">
+            <Link prefetch={true} href="/products" className="text-blue-500 underline">
               View Products
             </Link>
           </div>
@@ -229,7 +229,7 @@ export function ProductForm() {
         <Button type="submit" disabled={loading}>
           {loading ? (
             <div className="flex items-center space-x-2">
-              <span className="h-4 w-4 animate-spin rounded-full border-4 border-primary border-t-transparent"></span>
+              <span className="h-4 w-4 animate-spin border-black rounded-full border-4 border-primary border-t-transparent"></span>
               <span>Adding...</span>
             </div>
           ) : (
