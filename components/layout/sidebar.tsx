@@ -136,7 +136,7 @@ export function Sidebar() {
                     link.children.find((child) => child.href)?.href || ""
                   )
                     ? "bg-primary text-primary-foreground"
-                    : "hover:bg-green-500/20 "
+                    : "hover:bg-blue-600/20 "
                 }`}
               >
                 <link.icon className={`h-5 w-5 shrink-0 ${link.color}`} />
@@ -162,7 +162,7 @@ export function Sidebar() {
                       className={`block rounded-md p-2 text-sm font-medium transition-all duration-200 ${
                         pathname === child.href
                           ? "bg-primary text-primary-foreground"
-                          : "hover:bg-green-500/20 "
+                          : "hover:bg-blue-600/20 "
                       }`}
                     >
                       {child.label}
@@ -180,7 +180,7 @@ export function Sidebar() {
               className={`flex items-center space-x-3 rounded-md p-2 text-sm font-medium transition-all duration-200 ${
                 pathname === link.href
                   ? "bg-primary text-primary-foreground"
-                  : "hover:bg-green-500/20 "
+                  : "hover:bg-blue-600/20 "
               }`}
             >
               <link.icon className={`h-5 w-5 shrink-0 ${link.color}`} />

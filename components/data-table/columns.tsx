@@ -1,3 +1,4 @@
+// columns.tsx
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
@@ -8,18 +9,102 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import Link from "next/link";
 import { toast } from "sonner";
+import { useState } from "react";
+import { Product } from "@/types/types";
 
-export function createColumns<T extends Record<string, any>>(config: {
+interface ColumnsConfig<T> {
   columns: Array<{
     accessorKey: keyof T | string;
     header: string;
     cell?: (props: { row: { original: T } }) => React.ReactNode;
   }>;
   onDelete?: (id: number) => Promise<void>;
+  onDeleteSuccess?: (id: number) => void;
   editUrl?: (id: string) => string;
-}): ColumnDef<T>[] {
+}
+
+export function createColumns<T extends Record<string, any>>(
+  config: ColumnsConfig<T>
+): ColumnDef<T>[] {
+  const ActionCell = ({ row }: { row: { original: T } }) => {
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const handleDelete = async () => {
+      if (config.onDelete) {
+        setIsDeleting(true);
+        try {
+          await config.onDelete(row.original.id);
+          config.onDeleteSuccess?.(row.original.id);
+          toast.success("Product deleted successfully");
+          setIsDeleteDialogOpen(false);
+        } catch (error) {
+          toast.error("Failed to delete product");
+        } finally {
+          setIsDeleting(false);
+        }
+      }
+    };
+
+    return (
+      <>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {config.editUrl && (
+              <Link href={config.editUrl(row.original.id)} prefetch={true}>
+                <DropdownMenuItem>Edit</DropdownMenuItem>
+              </Link>
+            )}
+            <DropdownMenuItem 
+              className="text-destructive"
+              onClick={() => setIsDeleteDialogOpen(true)}
+            >
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete the product.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction 
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                {isDeleting ? "Deleting..." : "Delete"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </>
+    );
+  };
+
   return [
     ...config.columns.map((col) => ({
       accessorKey: col.accessorKey,
@@ -28,40 +113,7 @@ export function createColumns<T extends Record<string, any>>(config: {
     })),
     {
       id: "actions",
-      cell: ({ row }) => {
-        const handleDelete = async () => {
-          if (config.onDelete) {
-            try {
-              await config.onDelete(row.original.id);
-              toast.success("Item deleted successfully");
-            } catch (error) {
-              toast.error("Failed to delete item");
-            }
-          }
-        };
-
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {config.editUrl && (
-                <Link href={config.editUrl(row.original.id)} prefetch={true}>
-                  <DropdownMenuItem>Edit</DropdownMenuItem>
-                </Link>
-              )}
-              <span onClick={handleDelete}>
-                <DropdownMenuItem className="text-destructive">
-                  Delete
-                </DropdownMenuItem>
-              </span>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
+      cell: ActionCell,
     },
   ];
 }

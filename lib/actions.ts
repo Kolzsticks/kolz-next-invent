@@ -139,7 +139,7 @@ export async function deleteProduct(id: number) {
     throw new Error('Failed to delete product');
   }
 
-  revalidateTag("products");
+ 
 }
 
 
