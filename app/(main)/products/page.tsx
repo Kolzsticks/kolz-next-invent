@@ -123,14 +123,7 @@ export default function ProductsPage() {
             cell: ({ row }) => row.original.date || "N/A",
           },
         ],
-        onDelete: async (id: number) => {
-          try {
-            await deleteProduct(id);
-          } catch (error) {
-            console.error("Delete error in page:", error); // For debugging
-            throw error; // Re-throw to trigger error handling in the column component
-          }
-        },
+        onDelete: deleteProduct,
         onDeleteSuccess: handleDeleteSuccess,
         editUrl: (id) => `/products/edit/${id}`,
       }),
