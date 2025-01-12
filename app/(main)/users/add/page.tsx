@@ -13,7 +13,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Form,
@@ -26,17 +25,16 @@ import {
 import { toast } from "sonner";
 import { createUser } from "@/lib/actions";
 import { userSchema, type UserFormData } from "@/lib/zod";
-
-interface RealUser {
-  id: number;
-  name: string;
-  username: string;
-  password: string;
-  role: string;
-}
+import { AlertCircle, Eye, EyeOff } from "lucide-react";
 
 const UserRegistrationForm = () => {
   const [error, setError] = React.useState<string>("");
+
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const form = useForm<UserFormData>({
     resolver: zodResolver(userSchema),
@@ -150,7 +148,25 @@ const UserRegistrationForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" {...field} />
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        {...field}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8"
+                        onClick={togglePasswordVisibility}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
