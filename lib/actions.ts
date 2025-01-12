@@ -6,7 +6,7 @@ import { db } from "./db";
 import { Prisma } from "@prisma/client";
 import { revalidateTag } from "next/cache";
 import moment from "moment"; // Correct way to import moment
-import { SalePageType } from "./zod";
+import { EditUserInput, SalePageType } from "./zod";
 import { hash } from 'bcryptjs';
 
 
@@ -55,7 +55,6 @@ export async function createUser(user: CreateUserInput): Promise<RealUser> {
   }
 }
 
-
 export async function deleteUser(id: number) {
   try {
     await db.user.delete({
@@ -85,6 +84,17 @@ export async function getAllUsers(): Promise<RealUser[]> {
   }
 }
 
+export async function getUser(id: number) {
+  const user = await db.user.findUnique({
+    where: { id },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user;
+}
 
 export const getAllSales = async (date?: string): Promise<SalePageType[]> => {
   try {
@@ -125,9 +135,6 @@ export const getAllSales = async (date?: string): Promise<SalePageType[]> => {
   }
 };
 
-
-
-
 export async function getAllProducts(date?: string): Promise<Product[]> {
   try {
     // Create date filter if date is provided
@@ -164,9 +171,6 @@ export async function getAllProducts(date?: string): Promise<Product[]> {
   }
 }
 
-
-
-
 export async function updateProduct(id: number, data: UpdateProductData) {
   const formattedData = {
     ...data,
@@ -181,10 +185,6 @@ export async function updateProduct(id: number, data: UpdateProductData) {
   // Serialize the response
   return JSON.parse(JSON.stringify(updatedProduct));
 }
-
-
-
-// DELETE a product
 
 export async function deleteProduct(id: number) {
   try {
@@ -214,7 +214,6 @@ export async function deleteProduct(id: number) {
     };
   }
 }
-
 
 export async function deleteSale(id: number) {
   try {
@@ -250,7 +249,34 @@ export async function deleteSale(id: number) {
   }
 }
 
+export async function editUser(userId: number, data: Partial<EditUserInput>): Promise<RealUser> {
+  if (!data) {
+    throw new Error("User data is required");
+  }
 
+  try {
+    const updateData: any = {
+      name: data.name,
+      username: data.username,
+      role: data.role,
+    };
+
+    // Only hash and update password if it's provided
+    if (data.password) {
+      updateData.password = await hash(data.password, 10);
+    }
+
+    const updatedUser = await db.user.update({
+      where: { id: userId },
+      data: updateData,
+    });
+
+    return updatedUser;
+  } catch (error) {
+    console.error("Error updating user:", error);
+    throw error;
+  }
+}
 
 
 

@@ -58,3 +58,14 @@ export interface RealUser {
 
 
 export type CreateUserInput = Omit<RealUser, 'id'>;
+
+
+export interface EditUserPageProps {
+  params: {
+    id: string;
+  };
+}
+
+export interface EditUserFormProps {
+  user: RealUser;
+}
