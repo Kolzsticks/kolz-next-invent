@@ -1,4 +1,3 @@
-// columns.tsx
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
@@ -22,7 +21,6 @@ import {
 import Link from "next/link";
 import { toast } from "sonner";
 import { useState } from "react";
-import { Product } from "@/types/types";
 
 interface ColumnsConfig<T> {
   columns: Array<{
@@ -30,9 +28,9 @@ interface ColumnsConfig<T> {
     header: string;
     cell?: (props: { row: { original: T } }) => React.ReactNode;
   }>;
-  onDelete?: (id: number) => Promise<void>;
+  onDelete?: (id: number) => Promise<{ success: boolean; error?: string }>;
   onDeleteSuccess?: (id: number) => void;
-  editUrl?: (id: string) => string;
+  editUrl?: (id: number) => string;
 }
 
 export function createColumns<T extends Record<string, any>>(
@@ -46,12 +44,16 @@ export function createColumns<T extends Record<string, any>>(
       if (config.onDelete) {
         setIsDeleting(true);
         try {
-          await config.onDelete(row.original.id);
-          config.onDeleteSuccess?.(row.original.id);
-          toast.success("Product deleted successfully");
-          setIsDeleteDialogOpen(false);
+          const result = await config.onDelete(row.original.id);
+          if (result.success) {
+            config.onDeleteSuccess?.(row.original.id);
+            toast.success("Item deleted successfully");
+            setIsDeleteDialogOpen(false);
+          } else {
+            toast.error(result.error || "Failed to delete item");
+          }
         } catch (error) {
-          toast.error("Failed to delete product");
+          toast.error("Failed to delete item");
         } finally {
           setIsDeleting(false);
         }
@@ -86,7 +88,7 @@ export function createColumns<T extends Record<string, any>>(
             <AlertDialogHeader>
               <AlertDialogTitle>Are you sure?</AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete the product.
+                This action cannot be undone.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

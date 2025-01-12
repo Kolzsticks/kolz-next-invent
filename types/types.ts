@@ -49,7 +49,12 @@ export interface APIResponse {
 }
 
 export interface RealUser {
-  id: string;
+  id: number;
+  name: string;
   username: string;
+  password: string;
   role: string;
 }
+
+
+export type CreateUserInput = Omit<RealUser, 'id'>;

@@ -45,7 +45,7 @@ export default function SignIn() {
         redirect: false,
       });
 
-      console.log("SignIn response:", response); // Debug log
+      // console.log("SignIn response:", response); // Debug log
 
       if (response?.error) {
         setGlobalError(

@@ -75,7 +75,7 @@ const columnsConfig = {
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
-  console.log(session?.user);
+  // console.log(session?.user);
 
   return (
     <div className="space-y-16">

@@ -1,10 +1,18 @@
-'use client';
+"use client";
 
 import { DataTable } from "@/components/data-table/data-table";
 import { Button } from "@/components/ui/button";
-import { Plus, Calendar as CalendarIcon, X, DollarSign, Package, TrendingUp } from "lucide-react";
+import {
+  Plus,
+  Calendar as CalendarIcon,
+  X,
+  DollarSign,
+  Package,
+  TrendingUp,
+  RefreshCw,
+} from "lucide-react";
 import Link from "next/link";
-import { salesColumns } from "@/lib/colume-data";
+import { salesColumns } from "@/lib/column-data";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import { SalePageType } from "@/lib/zod";
@@ -33,7 +41,9 @@ export default function SalesPage() {
       const salesData = await getAllSales();
       setSales(salesData);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An unknown error occurred.");
+      setError(
+        err instanceof Error ? err.message : "An unknown error occurred."
+      );
     } finally {
       setLoading(false);
     }
@@ -44,11 +54,13 @@ export default function SalesPage() {
     setLoading(true);
     setError(null);
     try {
-      const formattedDate = format(selectedDate, 'yyyy-MM-dd');
+      const formattedDate = format(selectedDate, "yyyy-MM-dd");
       const salesData = await getAllSales(formattedDate);
       setSales(salesData);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An unknown error occurred.");
+      setError(
+        err instanceof Error ? err.message : "An unknown error occurred."
+      );
     } finally {
       setLoading(false);
     }
@@ -74,14 +86,23 @@ export default function SalesPage() {
     fetchAllSales();
   };
 
-
   if (error) {
     return (
       <div className="container mx-auto mt-10">
-        <Card>
-          <CardContent>
-            <h1 className="text-lg font-semibold">Error</h1>
-            <p>{error}</p>
+        <Card className="bg-destructive/10">
+          <CardContent className="pt-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-lg font-semibold">
+                  Error Loading Products
+                </h1>
+                <p className="text-sm text-muted-foreground">{error}</p>
+              </div>
+              <Button onClick={fetchAllSales} variant="outline" size="sm">
+                <RefreshCw className="mr-2 h-4 w-4" />
+                Retry
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -93,10 +114,7 @@ export default function SalesPage() {
     (acc, sale) => acc + Number(sale.price) * sale.quantity,
     0
   );
-  const totalItems = sales.reduce(
-    (acc, sale) => acc + sale.quantity,
-    0
-  );
+  const totalItems = sales.reduce((acc, sale) => acc + sale.quantity, 0);
   const averageSale = sales.length > 0 ? totalSales / sales.length : 0;
 
   return (
@@ -107,7 +125,7 @@ export default function SalesPage() {
           <h1 className="text-2xl font-bold">Sales Dashboard</h1>
           {date && (
             <p className="text-sm text-muted-foreground mt-1">
-              Showing sales for {format(date, 'MMMM d, yyyy')}
+              Showing sales for {format(date, "MMMM d, yyyy")}
             </p>
           )}
         </div>
@@ -116,7 +134,7 @@ export default function SalesPage() {
             <PopoverTrigger asChild>
               <Button variant="outline" className="flex items-center gap-2">
                 <CalendarIcon className="h-4 w-4" />
-                {date ? format(date, 'PPP') : 'Filter by Date'}
+                {date ? format(date, "PPP") : "Filter by Date"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="end">
@@ -129,8 +147,8 @@ export default function SalesPage() {
             </PopoverContent>
           </Popover>
           {date && (
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               size="icon"
               onClick={handleClearFilter}
               className="h-9 w-9"
@@ -152,7 +170,9 @@ export default function SalesPage() {
           <CardContent className="pt-6">
             <div className="flex items-center gap-2">
               <DollarSign className="h-4 w-4 text-muted-foreground" />
-              <h3 className="text-sm font-medium text-muted-foreground">Total Revenue</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">
+                Total Revenue
+              </h3>
             </div>
             {loading ? (
               <Skeleton className="h-8 w-40 mt-1" />
@@ -172,7 +192,9 @@ export default function SalesPage() {
           <CardContent className="pt-6">
             <div className="flex items-center gap-2">
               <Package className="h-4 w-4 text-muted-foreground" />
-              <h3 className="text-sm font-medium text-muted-foreground">Items Sold</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">
+                Items Sold
+              </h3>
             </div>
             {loading ? (
               <Skeleton className="h-8 w-24 mt-1" />
@@ -188,7 +210,9 @@ export default function SalesPage() {
           <CardContent className="pt-6">
             <div className="flex items-center gap-2">
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
-              <h3 className="text-sm font-medium text-muted-foreground">Average Sale</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">
+                Average Sale
+              </h3>
             </div>
             {loading ? (
               <Skeleton className="h-8 w-32 mt-1" />

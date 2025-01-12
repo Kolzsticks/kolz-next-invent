@@ -42,7 +42,7 @@ const getNestedValue = (obj: any, path: string) => {
 export function DataTable<TData>({
   columns,
   data,
-  filterColumn = "name",
+  filterColumn = 'name',
   filterPlaceholder = "Filter...",
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);

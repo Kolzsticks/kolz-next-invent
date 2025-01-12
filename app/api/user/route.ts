@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   try {
     const { username, password } = await req.json();
 
-    console.log("API received request:", { username }); // Debug log
+    // console.log("API received request:", { username }); // Debug log
 
     if (!username || !password) {
       return NextResponse.json(
@@ -22,30 +22,30 @@ export async function POST(req: Request) {
       where: { username },
     });
 
-    console.log("Found user:", user ? "yes" : "no"); // Debug log
+    // console.log("Found user:", user ? "yes" : "no"); // Debug log
 
     if (!user) {
       return NextResponse.json(
-        { error: "Invalid credentials" }, 
+        { error: "Invalid credentials" },
         { status: 401 }
       );
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    console.log("Password valid:", isPasswordValid); // Debug log
+    // console.log("Password valid:", isPasswordValid); // Debug log
 
     if (!isPasswordValid) {
       return NextResponse.json(
-        { error: "Invalid credentials" }, 
+        { error: "Invalid credentials" },
         { status: 401 }
       );
     }
 
-    const token = await new SignJWT({ 
-      id: user.id, 
+    const token = await new SignJWT({
+      id: user.id,
       username: user.username,
-      role: user.role 
+      role: user.role
     })
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
@@ -54,7 +54,7 @@ export async function POST(req: Request) {
 
     const { password: _, ...userWithoutPassword } = user;
 
-    console.log(user); // Debug log
+    // console.log(user); // Debug log
     return NextResponse.json({
       success: true,
       user: {

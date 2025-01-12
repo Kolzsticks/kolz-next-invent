@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Plus, Calendar as CalendarIcon, X, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { Product } from "@/types/types";
-import { columns } from "@/lib/colume-data";
+import { columns } from "@/lib/column-data";
 import { deleteProduct, getAllProducts } from "@/lib/actions";
 import { Calendar } from "@/components/ui/calendar";
 import { useCallback, useState, useEffect, useMemo } from "react";
@@ -255,12 +255,16 @@ export default function ProductsPage() {
           ))}
         </div>
       ) : (
-        <DataTable
-          columns={productColumns}
-          data={products}
-          filterColumn="name"
-          filterPlaceholder="Filter products..."
-        />
+        <Card>
+          <CardContent className="pt-6">
+            <DataTable
+              columns={productColumns}
+              data={products}
+              filterColumn="name"
+              filterPlaceholder="Filter products..."
+            />
+          </CardContent>
+        </Card>
       )}
     </div>
   );

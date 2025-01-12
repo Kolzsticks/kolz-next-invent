@@ -16,13 +16,13 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, category, subcategory, price,  venue, quantity } = body;
+    const { name, category, subcategory, price, venue, quantity } = body;
 
     // Validate required fields
     if (!name || !category || price == null) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
- 
+
     const newProduct = await db.product.create({
       data: {
         name,
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
       },
     });
 
-    console.log('Request body:', body);
+    // console.log('Request body:', body);
 
     return NextResponse.json(newProduct, { status: 201 });
   } catch (error) {

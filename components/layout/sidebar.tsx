@@ -39,7 +39,7 @@ const sidebarLinks = [
     color: "text-orange-500",
     children: [
       { href: "/users/manage", label: "Manage Users" },
-      { href: "/users/groups", label: "Manage Groups" },
+      { href: "/users/add", label: "Add Users" },
     ],
   },
   {

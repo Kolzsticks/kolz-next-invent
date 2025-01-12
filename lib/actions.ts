@@ -1,12 +1,13 @@
 'use server'
 
-import { Product, UpdateProductData } from "@/types/types";
+import { CreateUserInput, Product, RealUser, UpdateProductData } from "@/types/types";
 // lib/actions.ts
 import { db } from "./db";
 import { Prisma } from "@prisma/client";
 import { revalidateTag } from "next/cache";
 import moment from "moment"; // Correct way to import moment
 import { SalePageType } from "./zod";
+import { hash } from 'bcryptjs';
 
 
 
@@ -28,6 +29,61 @@ export async function createProduct(productData: UpdateProductData) {
   }
 }
 
+export async function createUser(user: CreateUserInput): Promise<RealUser> {
+  if (!user) {
+    throw new Error("User data is required");
+  }
+
+  try {
+    // Hash the password before storing
+    const hashedPassword = await hash(user.password, 10);
+
+    const newUser = await db.user.create({
+      data: {
+        name: user.name,
+        username: user.username,
+        password: hashedPassword,
+        role: user.role,
+      }
+    });
+
+    // revalidatePath('/users');
+    return newUser;
+  } catch (error) {
+    console.error("Error creating user:", error);
+    throw error;
+  }
+}
+
+
+export async function deleteUser(id: number) {
+  try {
+    await db.user.delete({
+      where: { id }
+    });
+    // revalidatePath('/users');
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    return { success: false, error: 'Failed to delete user' };
+  }
+}
+
+export async function getAllUsers(): Promise<RealUser[]> {
+  try {
+    const allUsers = await db.user.findMany({
+      select: {
+        id: true,
+        username: true,
+        role: true,
+      }
+    });
+    return allUsers as RealUser[];  // Now the types match
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+}
 
 
 export const getAllSales = async (date?: string): Promise<SalePageType[]> => {
@@ -129,30 +185,69 @@ export async function updateProduct(id: number, data: UpdateProductData) {
 
 
 // DELETE a product
+
 export async function deleteProduct(id: number) {
-
   try {
-    await db.product.delete({
-      where: { id },
+    // Check for existing sales before deletion
+    const existingSales = await db.sales.findFirst({
+      where: { product_id: id }
     });
-  } catch (error) {
-    throw new Error('Failed to delete product');
-  }
 
- 
+    if (existingSales) {
+      return {
+        success: false,
+        error: 'Cannot delete product with existing sales. Remove sales first.'
+      };
+    }
+
+    await db.product.delete({
+      where: { id }
+    });
+
+    // revalidatePath('/products');
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    return {
+      success: false,
+      error: 'Failed to delete product'
+    };
+  }
 }
 
 
 export async function deleteSale(id: number) {
   try {
     await db.sales.delete({
-      where: { id },
+      where: { id }
     });
-  } catch (error) {
-    throw new Error('Failed to delete sale');
-  }
 
-  revalidateTag("sales");
+    // Update product quantity after sale deletion
+    const sale = await db.sales.findUnique({
+      where: { id },
+      select: { product_id: true, quantity: true }
+    });
+
+    if (sale) {
+      await db.product.update({
+        where: { id: sale.product_id },
+        data: {
+          quantity: {
+            increment: sale.quantity // Return the quantity back to product
+          }
+        }
+      });
+    }
+
+    // revalidatePath('/sales');
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting sale:", error);
+    return {
+      success: false,
+      error: 'Failed to delete sale'
+    };
+  }
 }
 
 
