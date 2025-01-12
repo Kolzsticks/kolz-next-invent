@@ -61,9 +61,9 @@ export type CreateUserInput = Omit<RealUser, 'id'>;
 
 
 export interface EditUserPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export interface EditUserFormProps {

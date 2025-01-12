@@ -6,7 +6,8 @@ import EditUserForm from "./EditUserForm";
 
   
   export default async function EditUserPage({ params }: EditUserPageProps) {
-    const user = await getUser(parseInt(params.id));
+    const id = Number((await params).id);
+    const user = await getUser(id);
   
     return (
       <div className="container mx-auto py-10">
