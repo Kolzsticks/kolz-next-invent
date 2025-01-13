@@ -171,6 +171,22 @@ export async function getAllProducts(date?: string): Promise<Product[]> {
   }
 }
 
+export async function getAllCategories() {
+  try {
+    const categories = await db.product.findMany({
+      select: {
+        category: true,
+      },
+      distinct: ['category'],
+    });
+
+    return categories.map((category) => category.category);
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw new Error("Failed to fetch categories");
+  }
+}
+
 export async function updateProduct(id: number, data: UpdateProductData) {
   const formattedData = {
     ...data,
@@ -277,6 +293,7 @@ export async function editUser(userId: number, data: Partial<EditUserInput>): Pr
     throw error;
   }
 }
+
 
 
 

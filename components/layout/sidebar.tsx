@@ -29,8 +29,8 @@ const sidebarLinks = [
     icon: Package,
     color: "text-purple-500",
     children: [
-      { href: "/products/add", label: "Add Product" },
       { href: "/products", label: "Manage Products" },
+      { href: "/products/add", label: "Add Product" },
     ],
   },
   {
