@@ -2,21 +2,11 @@
 
 import { DataTable } from "@/components/data-table/data-table";
 import { Button } from "@/components/ui/button";
-import {
-  Plus,
-  Calendar as CalendarIcon,
-  X,
-  DollarSign,
-  Package,
-  TrendingUp,
-  RefreshCw,
-} from "lucide-react";
+import { Plus, Calendar as CalendarIcon, X } from "lucide-react";
 import Link from "next/link";
 import { salesColumns } from "@/lib/column-data";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
-import { SalePageType } from "@/lib/zod";
-import { getAllSales } from "@/lib/actions";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -25,97 +15,41 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useSalesStore } from "@/utils/stores/SalesStore";
+import { ErrorDisplay } from "@/components/ErrorDisplay";
+import { StatsCard } from "@/components/StatCard";
+import { formatCurrency } from "@/utils/functions";
 
 export default function SalesPage() {
-  const [sales, setSales] = useState<SalePageType[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [date, setDate] = useState<Date | undefined>(undefined);
+  const {
+    sales,
+    loading,
+    error,
+    date,
+    totalSales,
+    totalItems,
+    averageSale,
+    fetchAllSales,
+    fetchSalesByDate,
+    clearFilter,
+  } = useSalesStore();
   const [calendarOpen, setCalendarOpen] = useState(false);
-
-  // Function to fetch all sales
-  const fetchAllSales = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const salesData = await getAllSales();
-      setSales(salesData);
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "An unknown error occurred."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Function to fetch sales for a specific date
-  const fetchSalesByDate = async (selectedDate: Date) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const formattedDate = format(selectedDate, "yyyy-MM-dd");
-      const salesData = await getAllSales(formattedDate);
-      setSales(salesData);
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "An unknown error occurred."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Fetch all sales on component mount
   useEffect(() => {
     fetchAllSales();
   }, []);
 
-  // Handle date selection
   const handleDateSelect = (newDate: Date | undefined) => {
-    setDate(newDate);
     setCalendarOpen(false);
-    if (newDate) {
-      fetchSalesByDate(newDate);
-    }
+    if (newDate) fetchSalesByDate(newDate);
   };
 
-  // Handle clear filter
-  const handleClearFilter = () => {
-    setDate(undefined);
-    fetchAllSales();
-  };
+  // console.log(date)
 
   if (error) {
-    return (
-      <div className="container mx-auto mt-10">
-        <Card className="bg-destructive/10">
-          <CardContent className="pt-6 space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-lg font-semibold">
-                  Error Loading Products
-                </h1>
-                <p className="text-sm text-muted-foreground">{error}</p>
-              </div>
-              <Button onClick={fetchAllSales} variant="outline" size="sm">
-                <RefreshCw className="mr-2 h-4 w-4" />
-                Retry
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    return <ErrorDisplay error={error} onRetry={fetchAllSales} />;
   }
-
-  // Calculate statistics
-  const totalSales = sales.reduce(
-    (acc, sale) => acc + Number(sale.price) * sale.quantity,
-    0
-  );
-  const totalItems = sales.reduce((acc, sale) => acc + sale.quantity, 0);
-  const averageSale = sales.length > 0 ? totalSales / sales.length : 0;
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -132,7 +66,11 @@ export default function SalesPage() {
         <div className="flex items-center gap-2">
           <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
             <PopoverTrigger asChild>
-              <Button variant="outline" className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                disabled={loading}
+                className="flex items-center gap-2"
+              >
                 <CalendarIcon className="h-4 w-4" />
                 {date ? format(date, "PPP") : "Filter by Date"}
               </Button>
@@ -150,7 +88,7 @@ export default function SalesPage() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={handleClearFilter}
+              onClick={clearFilter}
               className="h-9 w-9"
             >
               <X className="h-4 w-4" />
@@ -162,71 +100,27 @@ export default function SalesPage() {
             </Button>
           </Link>
         </div>
+        {/* </div> */}
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2">
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
-              <h3 className="text-sm font-medium text-muted-foreground">
-                Total Revenue
-              </h3>
-            </div>
-            {loading ? (
-              <Skeleton className="h-8 w-40 mt-1" />
-            ) : (
-              <p className="text-2xl font-bold mt-2">
-                {new Intl.NumberFormat("en-NG", {
-                  style: "currency",
-                  currency: "NGN",
-                  minimumFractionDigits: 2,
-                }).format(totalSales)}
-              </p>
-            )}
-          </CardContent>
-        </Card>
+        <StatsCard
+          title="Total Revenue"
+          value={formatCurrency(totalSales)}
+          loading={loading}
+        />
+        <StatsCard
+          title="Total Items Sold"
+          value={formatCurrency(totalItems)}
+          loading={loading}
+        />
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2">
-              <Package className="h-4 w-4 text-muted-foreground" />
-              <h3 className="text-sm font-medium text-muted-foreground">
-                Items Sold
-              </h3>
-            </div>
-            {loading ? (
-              <Skeleton className="h-8 w-24 mt-1" />
-            ) : (
-              <p className="text-2xl font-bold mt-2">
-                {totalItems.toLocaleString()}
-              </p>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
-              <h3 className="text-sm font-medium text-muted-foreground">
-                Average Sale
-              </h3>
-            </div>
-            {loading ? (
-              <Skeleton className="h-8 w-32 mt-1" />
-            ) : (
-              <p className="text-2xl font-bold mt-2">
-                {new Intl.NumberFormat("en-NG", {
-                  style: "currency",
-                  currency: "NGN",
-                  minimumFractionDigits: 2,
-                }).format(averageSale)}
-              </p>
-            )}
-          </CardContent>
-        </Card>
+        <StatsCard
+          title="Average Sale"
+          value={formatCurrency(averageSale)}
+          loading={loading}
+        />
       </div>
 
       {/* Data Table Section */}
