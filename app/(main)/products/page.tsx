@@ -20,6 +20,7 @@ import { Product } from "@/types/types";
 import { ErrorDisplay } from "@/components/ErrorDisplay";
 import { StatsCard } from "@/components/StatCard";
 import { formatCurrency } from "@/utils/functions";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProductsPage() {
   const {
@@ -145,16 +146,25 @@ export default function ProductsPage() {
         />
       </div>
 
-      <Card>
-        <CardContent className="pt-6">
-          <DataTable
-            columns={productColumns}
-            data={products}
-            filterColumn="name"
-            filterPlaceholder="Filter products..."
-          />
-        </CardContent>
-      </Card>
+      {/* Data Table Section */}
+      {loading ? (
+        <div className="space-y-4">
+          <Skeleton className="h-12 w-full" />
+          <Skeleton className="h-12 w-full" />
+          <Skeleton className="h-12 w-full" />
+        </div>
+      ) : (
+        <Card>
+          <CardContent className="pt-6">
+            <DataTable
+              columns={productColumns}
+              data={products}
+              filterColumn="name"
+              filterPlaceholder="Filter products..."
+            />
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

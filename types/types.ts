@@ -85,3 +85,17 @@ export interface DashboardStatsProps {
   };
   isLoading: boolean;
 }
+
+
+
+export interface TrendData {
+  currentValue: number;
+  previousValue: number;
+  timespan: 'day' | 'week' | 'month' | 'year';
+}
+
+export interface TrendResult {
+  value: number;
+  timespan: string;
+  direction: 'up' | 'down' | 'none';
+}

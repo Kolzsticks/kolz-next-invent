@@ -1,16 +1,8 @@
 "use client";
 
-export interface TrendData {
-  currentValue: number;
-  previousValue: number;
-  timespan: 'day' | 'week' | 'month' | 'year';
-}
+import { TrendData, TrendResult } from "@/types/types";
 
-export interface TrendResult {
-  value: number;
-  timespan: string;
-  direction: 'up' | 'down' | 'none';
-}
+
 
 export function calculateTrend({ currentValue, previousValue, timespan }: TrendData): TrendResult {
   if (!previousValue || previousValue === 0) {
