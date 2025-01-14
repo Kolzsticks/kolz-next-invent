@@ -34,7 +34,7 @@ export // Omit 'id' and 'date' since they shouldn't be updated
 
 
 
-  // types.ts
+// types.ts
 export interface UserCredentials {
   username: string;
   password: string;
@@ -73,3 +73,15 @@ export interface EditUserFormProps {
 
 
 
+export interface DashboardStatsProps {
+  salesData: {
+    totalSales: number;
+    totalItems: number;
+    sales: Sales[];
+  };
+  productsData: {
+    products: any[];
+    totalValue: number;
+  };
+  isLoading: boolean;
+}

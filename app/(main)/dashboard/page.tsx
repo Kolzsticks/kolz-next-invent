@@ -1,18 +1,13 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Package, DollarSign, ShoppingCart, TrendingUp } from "lucide-react";
 import { DataTable } from "@/components/data-table/data-table";
 import { createColumns } from "@/components/data-table/columns";
 import CombinedCharts from "@/components/data-table/combined-charts";
 import CookieChecker from "@/components/CheckCookie";
 import { useSession } from "next-auth/react";
-import { useSalesStore } from "@/utils/stores/SalesStore";
-import { useEffect } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useProductsStore } from "@/utils/stores/ProductStore";
-import { StatsCard } from "@/components/StatCard";
-import { formatCurrency } from "@/utils/functions";
+import { useDashboardData } from "@/hooks/useDashboardData";
+import { DashboardStats } from "@/components/DashboardStats";
 
 const highestSellingProducts = [
   { id: 1, product: "Product A", sales: "500", revenue: "$25,000" },
@@ -81,62 +76,20 @@ const columnsConfig = {
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
-  // console.log(session?.user);
-  const {
-    sales,
-    loading,
-    error,
-    date,
-    totalSales,
-    totalItems,
-    averageSale,
-    fetchAllSales,
-  } = useSalesStore();
-
-  const {
-    products,
-    loading: productsLoading,
-    error: productsError,
-    totalValue,
-    fetchAllProducts,
-  } = useProductsStore();
-  useEffect(() => {
-    fetchAllSales();
-    fetchAllProducts();
-  }, []);
+  const { isLoading, error, salesData, productsData } = useDashboardData();
 
   return (
     <div className="space-y-16">
       <h2 className="text-2xl font-bold">
         Welcome back, {session?.user?.username || "Guest"}
       </h2>
-      {/* Overview Cards */}
       <CookieChecker />
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatsCard
-          title="Total Revenue"
-          value={formatCurrency(totalSales)}
-          loading={loading}
-        />
-        <StatsCard
-          title="Total Items Sold"
-          value={formatCurrency(totalItems)}
-          loading={loading}
-        />
 
-        <StatsCard
-          title="Total Products"
-          value={products.length}
-          loading={productsLoading}
-        />
-        <StatsCard
-          title="Total Products Value"
-          value={totalValue}
-          loading={productsLoading}
-          formatter={formatCurrency}
-        />
-      </div>
-
+      <DashboardStats
+        salesData={salesData}
+        productsData={productsData}
+        isLoading={isLoading}
+      />
       <CombinedCharts />
 
       {/* Data Tables */}

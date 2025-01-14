@@ -4,3 +4,6 @@ export const formatCurrency = (value: number | string) => {
     currency: "NGN",
   }).format(Number(value));
 };
+
+
+
