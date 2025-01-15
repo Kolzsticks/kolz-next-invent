@@ -10,7 +10,6 @@ import { EditUserInput, SalePageType } from "./zod";
 import { hash } from 'bcryptjs';
 
 
-
 export async function createProduct(productData: UpdateProductData) {
   if (!productData) {
     throw new Error("Product data is required");

@@ -14,7 +14,7 @@ export function calculateTrend({ currentValue, previousValue, timespan }: TrendD
   }
 
   const percentageChange = ((currentValue - previousValue) / previousValue) * 100;
-  
+
   const timespanText = {
     day: 'since yesterday',
     week: 'from last week',
@@ -50,9 +50,21 @@ export function getPreviousPeriodValue(data: any[], dateKey: string, valueKey: s
   }
 
   const previousPeriodData = data.filter(item => {
+    // More robust date parsing
     const itemDate = new Date(item[dateKey]);
+    if (isNaN(itemDate.getTime())) {
+      console.warn(`Invalid date found: ${item[dateKey]}`);
+      return false;
+    }
     return itemDate >= previousDate && itemDate < now;
   });
 
-  return previousPeriodData.reduce((sum, item) => sum + (Number(item[valueKey]) || 0), 0);
+  return previousPeriodData.reduce((sum, item) => {
+    const value = Number(item[valueKey]);
+    if (isNaN(value)) {
+      console.warn(`Invalid ${valueKey} found:`, item);
+      return sum;
+    }
+    return sum + value;
+  }, 0);
 }

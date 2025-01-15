@@ -112,7 +112,7 @@ export default function SalesPage() {
         />
         <StatsCard
           title="Total Items Sold"
-          value={formatCurrency(totalItems)}
+          value={totalItems}
           loading={loading}
         />
 

@@ -30,7 +30,7 @@ export function useDashboardData() {
     const fetchData = async () => {
       setIsLoading(true);
       setError(null);
-      
+
       try {
         // Fetch both data sources in parallel
         await Promise.all([

@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LucideIcon, TrendingDown, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { TrendResult } from "./CheckTrend";
+import { TrendResult } from "@/types/types";
 
 interface StatsCardProps {
   title: string;

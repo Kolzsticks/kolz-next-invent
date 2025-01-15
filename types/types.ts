@@ -75,16 +75,32 @@ export interface EditUserFormProps {
 
 export interface DashboardStatsProps {
   salesData: {
-    totalSales: number;
-    totalItems: number;
-    sales: Sales[];
+    revenue: {
+      current: number;
+      previous: number;
+      trend: {
+        value: number;
+        timespan: string;
+        direction: "up" | "down" | "none"; // Direction of trend
+      };
+    };
+    itemsSold: {
+      current: number;
+      previous: number;
+      trend: {
+        value: number;
+        timespan: string;
+        direction: "up" | "down" | "none";
+      };
+    };
   };
   productsData: {
-    products: any[];
+    total: number;
     totalValue: number;
   };
   isLoading: boolean;
 }
+
 
 
 
@@ -99,3 +115,5 @@ export interface TrendResult {
   timespan: string;
   direction: 'up' | 'down' | 'none';
 }
+
+export type Period = 'day' | 'week' | 'month' | 'year';
