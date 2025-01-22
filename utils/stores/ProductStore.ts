@@ -2,7 +2,7 @@
 import { create } from "zustand";
 import { format } from "date-fns";
 import { Product } from "@/types/types";
-import { deleteProduct, getAllProducts } from "@/lib/actions";
+import { getAllProducts } from "@/lib/actions";
 
 interface ProductsStore {
   products: Product[];

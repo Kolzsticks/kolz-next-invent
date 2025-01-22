@@ -70,7 +70,30 @@ export interface EditUserFormProps {
   user: RealUser;
 }
 
-
+export interface DashboardData {
+  revenue: {
+    current: number;
+    previous: number;
+    trend: {
+      value: number;
+      timespan: string;
+      direction: "up" | "down" | "none";
+    };
+  };
+  itemsSold: {
+    current: number;
+    previous: number;
+    trend: {
+      value: number;
+      timespan: string;
+      direction: "up" | "down" | "none";
+    };
+  };
+  products: {
+    total: number;
+    totalValue: number;
+  };
+}
 
 
 export interface DashboardStatsProps {

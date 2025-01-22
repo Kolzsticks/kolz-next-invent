@@ -7,6 +7,9 @@ import {
   ColumnDef,
 } from "@tanstack/react-table";
 import { db } from "./db";
+import { useProductsStore } from "@/utils/stores/ProductStore";
+
+
 
 export const productColumns: ColumnDef<Product>[] = createColumns({
   columns: [
@@ -48,6 +51,10 @@ export const productColumns: ColumnDef<Product>[] = createColumns({
   ],
   onDelete: deleteProduct,
   editUrl: (id) => `/products/edit/${id}`,
+  onDeleteSuccess(id) {
+    const { handleDeleteSuccess } = useProductsStore.getState();
+    handleDeleteSuccess(id); // Properly invoke the function
+  },
 });
 
 export const salesColumns: ColumnDef<SalePageType>[] = createColumns({

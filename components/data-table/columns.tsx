@@ -50,7 +50,7 @@ export function createColumns<T extends Record<string, any>>(
           if (result.success) {
             config.onDeleteSuccess?.(row.original.id);
             toast.success("Item deleted successfully");
-            router.refresh();
+            // router.refresh();
             setIsDeleteDialogOpen(false);
           } else {
             toast.error(result.error || "Failed to delete item");

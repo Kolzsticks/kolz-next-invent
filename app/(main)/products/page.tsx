@@ -119,6 +119,7 @@ export default function ProductsPage() {
               data={products}
               filterColumn="name"
               filterPlaceholder="Filter products..."
+              
             />
           </CardContent>
         </Card>

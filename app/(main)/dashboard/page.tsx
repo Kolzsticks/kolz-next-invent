@@ -6,32 +6,10 @@ import CookieChecker from "@/components/CheckCookie";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { DashboardStats } from "@/components/DashboardStats";
+import { DashboardData } from "@/types/types";
 
 // Define the type for the dashboard data
-interface DashboardData {
-  revenue: {
-    current: number;
-    previous: number;
-    trend: {
-      value: number;
-      timespan: string;
-      direction: "up" | "down" | "none";
-    };
-  };
-  itemsSold: {
-    current: number;
-    previous: number;
-    trend: {
-      value: number;
-      timespan: string;
-      direction: "up" | "down" | "none";
-    };
-  };
-  products: {
-    total: number;
-    totalValue: number;
-  };
-}
+
 
 export default function DashboardPage() {
   const { data: session } = useSession();
@@ -41,7 +19,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/trends?period=month");
+        const response = await fetch("/api/trends?period=day");
         const data: DashboardData = await response.json(); // Enforce DashboardData type
         setDashboardData(data);
       } catch (error) {
