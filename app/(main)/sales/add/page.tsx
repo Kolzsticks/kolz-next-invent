@@ -172,11 +172,10 @@ export default function AddSalePage() {
               <div className="text-sm text-gray-500 mt-2">Searching...</div>
             )}
 
-            {searchResults.length > 0 && (
+            {searchResults.length > 0 ? (
               <div className="absolute z-50 w-full">
                 <Command className="rounded-lg border shadow-md">
                   <CommandList>
-                    <CommandEmpty>No products found.</CommandEmpty>
                     <CommandGroup heading="Available Products">
                       {searchResults.map((product) => (
                         <CommandItem
@@ -199,7 +198,15 @@ export default function AddSalePage() {
                   </CommandList>
                 </Command>
               </div>
-            )}
+            ) : query && !isSearching ? (
+              <div className="absolute z-50 w-full">
+                <Command className="rounded-lg border shadow-md">
+                  <CommandList>
+                    <CommandEmpty>No products found.</CommandEmpty>
+                  </CommandList>
+                </Command>
+              </div>
+            ) : null}
           </div>
 
           <div>

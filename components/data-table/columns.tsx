@@ -21,6 +21,7 @@ import {
 import Link from "next/link";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface ColumnsConfig<T> {
   columns: Array<{
@@ -39,6 +40,7 @@ export function createColumns<T extends Record<string, any>>(
   const ActionCell = ({ row }: { row: { original: T } }) => {
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+    const router = useRouter();
 
     const handleDelete = async () => {
       if (config.onDelete) {
@@ -48,6 +50,7 @@ export function createColumns<T extends Record<string, any>>(
           if (result.success) {
             config.onDeleteSuccess?.(row.original.id);
             toast.success("Item deleted successfully");
+            router.refresh();
             setIsDeleteDialogOpen(false);
           } else {
             toast.error(result.error || "Failed to delete item");

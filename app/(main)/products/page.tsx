@@ -13,14 +13,12 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { createColumns } from "@/components/data-table/columns";
-import { ColumnDef } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
-import { Product } from "@/types/types";
 import { ErrorDisplay } from "@/components/ErrorDisplay";
 import { StatsCard } from "@/components/StatCard";
 import { formatCurrency } from "@/utils/functions";
 import { Skeleton } from "@/components/ui/skeleton";
+import { productColumns } from "@/lib/column-data";
 
 export default function ProductsPage() {
   const {
@@ -43,46 +41,6 @@ export default function ProductsPage() {
   useEffect(() => {
     fetchAllProducts();
   }, [fetchAllProducts]);
-
-  const productColumns: ColumnDef<Product>[] = createColumns({
-    columns: [
-      {
-        accessorKey: "name",
-        header: "Name",
-        cell: ({ row }) => row.original.name || "N/A",
-      },
-      {
-        accessorKey: "category",
-        header: "Category",
-        cell: ({ row }) => row.original.category || "N/A",
-      },
-      {
-        accessorKey: "subcategory",
-        header: "Subcategory",
-        cell: ({ row }) => row.original.subcategory || "N/A",
-      },
-      {
-        accessorKey: "price",
-        header: "Price",
-        cell: ({ row }) => row.original.price || "N/A",
-      },
-      {
-        accessorKey: "venue",
-        header: "Venue",
-        cell: ({ row }) => row.original.venue || "N/A",
-      },
-      {
-        accessorKey: "quantity",
-        header: "Quantity",
-        cell: ({ row }) => row.original.quantity || "N/A",
-      },
-      {
-        accessorKey: "date",
-        header: "Date",
-        cell: ({ row }) => row.original.date || "N/A",
-      },
-    ],
-  });
 
   if (error) {
     return <ErrorDisplay error={error} onRetry={fetchAllProducts} />;

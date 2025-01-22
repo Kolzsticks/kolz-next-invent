@@ -68,8 +68,8 @@ export default function SalesPage() {
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                disabled={loading}
                 className="flex items-center gap-2"
+                disabled={loading}
               >
                 <CalendarIcon className="h-4 w-4" />
                 {date ? format(date, "PPP") : "Filter by Date"}
@@ -89,18 +89,18 @@ export default function SalesPage() {
               variant="ghost"
               size="icon"
               onClick={clearFilter}
+              disabled={loading}
               className="h-9 w-9"
             >
               <X className="h-4 w-4" />
             </Button>
           )}
-          <Link href="/sales/add" className="ml-2">
-            <Button>
-              <Plus className="mr-2 h-4 w-4" /> Add Sale
+          <Link href="/products/add" prefetch={true}>
+            <Button disabled={loading}>
+              <Plus className="mr-2 h-4 w-4" /> Add Product
             </Button>
           </Link>
         </div>
-        {/* </div> */}
       </div>
 
       {/* Stats Cards */}

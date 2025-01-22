@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-table";
 import { db } from "./db";
 
-export const columns: ColumnDef<Product>[] = createColumns({
+export const productColumns: ColumnDef<Product>[] = createColumns({
   columns: [
     {
       accessorKey: "name",
@@ -24,7 +24,7 @@ export const columns: ColumnDef<Product>[] = createColumns({
       accessorKey: "subcategory",
       header: "Subcategory",
       cell: ({ row }) => row.original.subcategory || "N/A",
-    }, // Handle undefined values
+    },
     {
       accessorKey: "price",
       header: "Price",
@@ -77,9 +77,6 @@ export const salesColumns: ColumnDef<SalePageType>[] = createColumns({
   onDelete: deleteSale,
   editUrl: (id) => `/sales/edit/${id}`,
 });
-
-
-
 
 export const userColumns: ColumnDef<RealUser>[] = createColumns({
   columns: [

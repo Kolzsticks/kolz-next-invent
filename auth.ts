@@ -80,6 +80,9 @@ export const config: NextAuthConfig = {
     },
   },
   debug: process.env.NODE_ENV === "development",
+  // session:{
+  //   maxAge: 60
+  // }
 };
 
 export const { handlers, auth, signIn, signOut } = NextAuth(config);

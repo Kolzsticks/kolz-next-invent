@@ -62,6 +62,7 @@ export const useSalesStore = create<SalesState>((set, get) => ({
       set({
         sales: salesData,
         loading: false,
+        date: selectedDate,
         totalSales: salesData.reduce(
           (acc, sale) => acc + Number(sale.price) * sale.quantity,
           0
