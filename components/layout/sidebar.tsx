@@ -22,7 +22,7 @@ const sidebarLinks = [
     href: "/dashboard",
     icon: LayoutDashboard,
     label: "Dashboard",
-    color: "text-blue-500",
+    color: "text-blue-800",
   },
   {
     label: "Products",
@@ -63,32 +63,24 @@ const sidebarLinks = [
     label: "Media Library",
     color: "text-yellow-500",
   },
-  {
-    href: "/reports",
-    icon: BarChart2,
-    label: "Reports",
-    color: "text-teal-500",
-  },
+ 
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>(
     {}
   );
 
   useEffect(() => {
-    const handleResize = () => {
-      const mobile = window.innerWidth <= 768;
-      setIsMobile(mobile);
-      setIsCollapsed(mobile); // Collapse on mobile, expand on larger screens
-    };
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
 
   const toggleSidebar = () => {
     setIsCollapsed((prev) => !prev);

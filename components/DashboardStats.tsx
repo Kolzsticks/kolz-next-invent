@@ -4,7 +4,6 @@ import {
   DollarSign, 
   ShoppingCart, 
   Package, 
-  Users 
 } from "lucide-react";
 import { StatsCard } from "./StatCard";
 import { formatCurrency } from "@/utils/functions";

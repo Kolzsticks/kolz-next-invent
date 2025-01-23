@@ -2,8 +2,20 @@
 
 import { TrendingUp } from "lucide-react";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 import { Loader2 } from "lucide-react"; // Import ShadCN UI loader icon
 
 interface CombinedChartsProps {
@@ -31,7 +43,12 @@ const productConfig = {
   },
 } satisfies ChartConfig;
 
-export function CombinedCharts({ salesData, productData, period, isLoading }: CombinedChartsProps) {
+export function CombinedCharts({
+  salesData,
+  productData,
+  period,
+  isLoading,
+}: CombinedChartsProps) {
   return (
     <div className="flex lg:flex-row flex-col gap-6 w-full">
       {/* Sales Overview Area Chart */}
@@ -121,7 +138,7 @@ export function CombinedCharts({ salesData, productData, period, isLoading }: Co
                   cursor={false}
                   content={<ChartTooltipContent indicator="dot" />}
                 />
-                <Bar dataKey="count"  fill="hsl(var(--chart-2))" />
+                <Bar dataKey="count" fill="hsl(var(--chart-2))" />
               </BarChart>
             </ChartContainer>
           )}

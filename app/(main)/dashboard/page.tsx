@@ -91,8 +91,10 @@ export default function DashboardPage() {
         <h2 className="text-3xl font-bold">
           Welcome back, {session?.user?.username || "Guest"}!
         </h2>
-        <div className="flex items-center space-x-4" >
-          <div className="text-sm text-gray-500" suppressHydrationWarning>{new Date().toLocaleDateString()}</div>
+        <div className="flex items-center space-x-4">
+          <div className="text-sm text-gray-500" suppressHydrationWarning>
+            {new Date().toLocaleDateString()}
+          </div>
           {/* Select Dropdown for period */}
           <Select value={period} onValueChange={handlePeriodChange}>
             <SelectTrigger className=" p-2 rounded-md shadow-sm ring-0">
