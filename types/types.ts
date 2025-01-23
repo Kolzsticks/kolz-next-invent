@@ -93,6 +93,15 @@ export interface DashboardData {
     total: number;
     totalValue: number;
   };
+  categories: {
+    id: number;
+    name: string;
+    productCount: number;
+    subcategories: {
+      id: number;
+      name: string;
+    }[];
+  }[];
 }
 
 

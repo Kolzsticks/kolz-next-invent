@@ -7,7 +7,7 @@ function calculateServerTrend({ currentValue, previousValue, timespan }: TrendDa
     return {
       value: 0,
       timespan: `No previous ${timespan} data`,
-      direction: 'none'
+      direction: 'none',
     };
   }
 
@@ -17,13 +17,13 @@ function calculateServerTrend({ currentValue, previousValue, timespan }: TrendDa
     day: 'since yesterday',
     week: 'from last week',
     month: 'from last month',
-    year: 'from last year'
+    year: 'from last year',
   };
 
   return {
     value: Math.round(percentageChange * 10) / 10,
     timespan: `${percentageChange >= 0 ? '+' : ''}${Math.round(percentageChange * 10) / 10}% ${timespanText[timespan]}`,
-    direction: percentageChange > 0 ? 'up' : percentageChange < 0 ? 'down' : 'none'
+    direction: percentageChange > 0 ? 'up' : percentageChange < 0 ? 'down' : 'none',
   };
 }
 
@@ -31,11 +31,11 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const period = (searchParams.get('period') || 'month') as Period;
-    
+
     if (!['day', 'week', 'month', 'year'].includes(period)) {
       return NextResponse.json(
         { error: 'Invalid period parameter' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -57,7 +57,7 @@ export async function GET(request: Request) {
         break;
     }
 
-    // Get sales statistics
+    // Sales statistics
     const currentPeriodStats = await db.sales.aggregate({
       _sum: {
         price: true,
@@ -71,10 +71,6 @@ export async function GET(request: Request) {
       },
     });
 
-    if (!currentPeriodStats || !currentPeriodStats._sum) {
-      throw new Error('Failed to fetch current period stats');
-    }
-
     const previousPeriodStart = new Date(previousDate);
     const daysInPeriod = {
       day: 1,
@@ -82,7 +78,6 @@ export async function GET(request: Request) {
       month: 30,
       year: 365,
     }[period];
-    
     previousPeriodStart.setDate(previousPeriodStart.getDate() - daysInPeriod);
 
     const previousPeriodStats = await db.sales.aggregate({
@@ -98,24 +93,15 @@ export async function GET(request: Request) {
       },
     });
 
-    if (!previousPeriodStats || !previousPeriodStats._sum) {
-      throw new Error('Failed to fetch previous period stats');
-    }
-
-    // Get products statistics
-    const productsStats = await db.$transaction([
-      // Get total number of products
+    // Product statistics
+    const [totalProducts, productsTotalPrice] = await db.$transaction([
       db.product.count(),
-      
-      // Get total value of all products (price * quantity)
       db.product.aggregate({
         _sum: {
           price: true,
         },
-      })
+      }),
     ]);
-
-    const [totalProducts, productsTotalPrice] = productsStats;
 
     // Calculate trends
     const currentRevenue = Number(currentPeriodStats._sum.price) || 0;
@@ -126,45 +112,75 @@ export async function GET(request: Request) {
     const revenueTrend = calculateServerTrend({
       currentValue: currentRevenue,
       previousValue: previousRevenue,
-      timespan: period
+      timespan: period,
     });
 
     const itemsSoldTrend = calculateServerTrend({
       currentValue: currentQuantity,
       previousValue: previousQuantity,
-      timespan: period
+      timespan: period,
     });
+
+    // Category statistics
+    const categoriesWithCounts = await db.category.findMany({
+      include: {
+        Subcategory: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    const categoryStats = await Promise.all(
+      categoriesWithCounts.map(async (category) => {
+        const productCount = await db.product.count({
+          where: { category: category.name },
+        });
+
+        return {
+          id: category.id,
+          name: category.name,
+          productCount,
+          subcategories: category.Subcategory.map((sub) => ({
+            id: sub.id,
+            name: sub.name,
+          })),
+        };
+      }),
+    );
 
     return NextResponse.json({
       revenue: {
         current: currentRevenue,
         previous: previousRevenue,
-        trend: revenueTrend
+        trend: revenueTrend,
       },
       itemsSold: {
         current: currentQuantity,
         previous: previousQuantity,
-        trend: itemsSoldTrend
+        trend: itemsSoldTrend,
       },
       products: {
         total: totalProducts,
         totalValue: Number(productsTotalPrice._sum.price) || 0,
-      }
+      },
+      categories: categoryStats, // Include category-based stats
     });
-
   } catch (error) {
     console.error('Error fetching trends:', error);
-    
+
     if (error instanceof Error) {
       return NextResponse.json(
         { error: error.message },
-        { status: 500 }
+        { status: 500 },
       );
     }
-    
+
     return NextResponse.json(
       { error: 'An unexpected error occurred while fetching trends' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

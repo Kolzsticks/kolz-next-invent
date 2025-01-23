@@ -47,7 +47,7 @@ const sidebarLinks = [
     icon: ShoppingCart,
     color: "text-green-500",
     children: [
-      { href: "/sales/manage", label: "Manage Sales" },
+      { href: "/sales", label: "Manage Sales" },
       { href: "/sales/add", label: "Add Sales" },
     ],
   },

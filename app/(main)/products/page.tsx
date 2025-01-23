@@ -48,9 +48,16 @@ export default function ProductsPage() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Products</h1>
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 lg:gap-6">
+        <div className="text-center lg:text-left">
+          <h1 className="text-2xl font-bold">Products</h1>
+          {date && (
+            <p className="text-sm text-muted-foreground mt-1">
+              Showing products for {format(date, "MMMM d, yyyy")}
+            </p>
+          )}
+        </div>
+        <div className="flex flex-col sm:flex-row lg:flex-row items-center lg:items-center gap-3 sm:gap-4 flex-wrap">
           <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
             <PopoverTrigger asChild>
               <Button
@@ -84,7 +91,7 @@ export default function ProductsPage() {
           )}
           <Link href="/products/add" prefetch={true}>
             <Button disabled={loading}>
-              <Plus className="mr-2 h-4 w-4" /> Add Product
+              <Plus className="mr-2 h-4 w-4" /> Add products
             </Button>
           </Link>
         </div>
@@ -119,7 +126,6 @@ export default function ProductsPage() {
               data={products}
               filterColumn="name"
               filterPlaceholder="Filter products..."
-              
             />
           </CardContent>
         </Card>

@@ -5,22 +5,21 @@ import CombinedCharts from "@/components/data-table/combined-charts";
 import CookieChecker from "@/components/CheckCookie";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import { DashboardStats } from "@/components/DashboardStats";
 import { DashboardData } from "@/types/types";
-
-// Define the type for the dashboard data
-
+import { DashboardStats } from "@/components/DashboardStats";
 
 export default function DashboardPage() {
   const { data: session } = useSession();
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/trends?period=day");
-        const data: DashboardData = await response.json(); // Enforce DashboardData type
+        const response = await fetch("/api/trends?period=month");
+        const data: DashboardData = await response.json();
         setDashboardData(data);
       } catch (error) {
         console.error("Failed to fetch dashboard data:", error);
@@ -32,13 +31,43 @@ export default function DashboardPage() {
     fetchData();
   }, []);
 
+  // Transforming `dashboardData` for charts
+  const salesData = dashboardData
+    ? [
+        {
+          month: "Current",
+          sales: dashboardData.itemsSold.current,
+          revenue: dashboardData.revenue.current,
+        },
+        {
+          month: "Previous",
+          sales: dashboardData.itemsSold.previous,
+          revenue: dashboardData.revenue.previous,
+        },
+      ]
+    : [];
+
+  const productData = dashboardData?.products
+    ? [
+        { category: "Total Products", count: dashboardData.products.total },
+        { category: "Total Value", count: dashboardData.products.totalValue },
+      ]
+    : [];
+
+    const categoryData = dashboardData?.categories
+    ? dashboardData.categories.map((category) => ({
+        category: category.name,
+        count: category.productCount, // Use productCount instead of count
+      }))
+    : [];
+  
+
   return (
     <div className="space-y-16">
       <h2 className="text-2xl font-bold">
         Welcome back, {session?.user?.username || "Guest"}
       </h2>
       <CookieChecker />
-
       {/* Pass loading state and data directly to DashboardStats */}
       <DashboardStats
         salesData={{
@@ -60,7 +89,8 @@ export default function DashboardPage() {
         isLoading={isLoading}
       />
 
-      <CombinedCharts />
+      {/* Pass loading state and data directly to CombinedCharts */}
+      <CombinedCharts salesData={salesData} productData={categoryData} />
 
       {/* Data Tables */}
       <div className="flex flex-col lg:flex-row gap-4">
@@ -68,25 +98,19 @@ export default function DashboardPage() {
           <CardHeader>
             <CardTitle>Highest Selling Products</CardTitle>
           </CardHeader>
-          <CardContent>
-            {/* Placeholder for the table */}
-          </CardContent>
+          <CardContent>{/* Placeholder for the table */}</CardContent>
         </Card>
         <Card>
           <CardHeader>
             <CardTitle>Latest Sales</CardTitle>
           </CardHeader>
-          <CardContent>
-            {/* Placeholder for the table */}
-          </CardContent>
+          <CardContent>{/* Placeholder for the table */}</CardContent>
         </Card>
         <Card>
           <CardHeader>
             <CardTitle>Recently Added Products</CardTitle>
           </CardHeader>
-          <CardContent>
-            {/* Placeholder for the table */}
-          </CardContent>
+          <CardContent>{/* Placeholder for the table */}</CardContent>
         </Card>
       </div>
     </div>

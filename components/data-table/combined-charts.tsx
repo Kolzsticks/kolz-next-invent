@@ -18,22 +18,10 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-const salesData = [
-  { month: "January", sales: 1200, revenue: 1500 },
-  { month: "February", sales: 1400, revenue: 1800 },
-  { month: "March", sales: 1300, revenue: 1700 },
-  { month: "April", sales: 1500, revenue: 2000 },
-  { month: "May", sales: 1600, revenue: 2100 },
-  { month: "June", sales: 1800, revenue: 2400 },
-];
-
-const productData = [
-  { category: "Electronics", count: 400 },
-  { category: "Furniture", count: 300 },
-  { category: "Clothing", count: 500 },
-  { category: "Books", count: 250 },
-  { category: "Accessories", count: 350 },
-];
+interface CombinedChartsProps {
+  salesData: { month: string; sales: number; revenue: number }[];
+  productData: { category: string; count: number }[];
+}
 
 const salesConfig = {
   sales: {
@@ -53,7 +41,10 @@ const productConfig = {
   },
 } satisfies ChartConfig;
 
-export function CombinedCharts() {
+export function CombinedCharts({
+  salesData,
+  productData,
+}: CombinedChartsProps) {
   return (
     <div className="flex lg:flex-row flex-col gap-6 w-full">
       {/* Sales Overview Area Chart */}
@@ -65,11 +56,10 @@ export function CombinedCharts() {
         <CardContent>
           <ChartContainer config={salesConfig}>
             <AreaChart
-              accessibilityLayer
               data={salesData}
               margin={{ left: 12, right: 12 }}
-              width={undefined} // Optional if using responsive wrapper
-              height={300} // Adjust as needed
+              width={undefined}
+              height={300}
             >
               <CartesianGrid vertical={false} />
               <XAxis
@@ -77,7 +67,6 @@ export function CombinedCharts() {
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
-                tickFormatter={(value) => value.slice(0, 3)}
               />
               <ChartTooltip
                 cursor={false}
@@ -124,11 +113,10 @@ export function CombinedCharts() {
         <CardContent>
           <ChartContainer config={productConfig}>
             <BarChart
-              accessibilityLayer
               data={productData}
               margin={{ left: 12, right: 12 }}
-              width={undefined} // Optional if using responsive wrapper
-              height={300} // Adjust as needed
+              width={undefined}
+              height={300}
             >
               <CartesianGrid vertical={false} />
               <XAxis
@@ -136,6 +124,7 @@ export function CombinedCharts() {
                 tickLine={false}
                 axisLine={false}
                 tickMargin={10}
+                tickFormatter={(value) => value.slice(0, 3)}
               />
               <ChartTooltip
                 cursor={false}
