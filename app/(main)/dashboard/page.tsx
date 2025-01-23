@@ -8,10 +8,19 @@ import { CombinedCharts } from "@/components/data-table/combined-charts";
 import CookieChecker from "@/components/CheckCookie";
 import { Button } from "@/components/ui/button"; // ShadCN UI Button
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"; // ShadCN UI Select
 
 export default function DashboardPage() {
   const { data: session } = useSession();
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [period, setPeriod] = useState("month"); // Add state for period
 
@@ -69,21 +78,36 @@ export default function DashboardPage() {
     : [];
 
   // Define the period label dynamically based on the selected period
-  const periodLabel = period === "month" ? "This Month" : period === "year" ? "This Year" : "Custom Period";
+  const periodLabel =
+    period === "month"
+      ? "This Month"
+      : period === "year"
+      ? "This Year"
+      : "Custom Period";
 
   return (
     <div className="space-y-16">
-      <h2 className="text-2xl font-bold">
-        Welcome back, {session?.user?.username || "Guest"}
-      </h2>
-      <CookieChecker />
-
-      {/* Period Selection - ShadCN UI Buttons */}
-      <div className="flex space-x-4">
-        <Button variant={period === "day" ? "default" : "outline"} onClick={() => handlePeriodChange("day")}>Day</Button>
-        <Button variant={period === "month" ? "default" : "outline"} onClick={() => handlePeriodChange("month")}>Month</Button>
-        <Button variant={period === "year" ? "default" : "outline"} onClick={() => handlePeriodChange("year")}>Year</Button>
+      <div className="flex justify-between items-center">
+        <h2 className="text-3xl font-bold">
+          Welcome back, {session?.user?.username || "Guest"}!
+        </h2>
+        <div className="flex items-center space-x-4" >
+          <div className="text-sm text-gray-500" suppressHydrationWarning>{new Date().toLocaleDateString()}</div>
+          {/* Select Dropdown for period */}
+          <Select value={period} onValueChange={handlePeriodChange}>
+            <SelectTrigger className=" p-2 rounded-md shadow-sm ring-0">
+              <SelectValue placeholder="Select Period" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="day">Day</SelectItem>
+              <SelectItem value="month">Month</SelectItem>
+              <SelectItem value="year">Year</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
+
+      <CookieChecker />
 
       {/* Pass loading state and data directly to DashboardStats */}
       <DashboardStats
