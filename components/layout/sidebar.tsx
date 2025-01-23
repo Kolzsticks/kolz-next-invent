@@ -63,7 +63,12 @@ const sidebarLinks = [
     label: "Media Library",
     color: "text-yellow-500",
   },
- 
+  {
+    href: "/about-app",
+    icon: BarChart2, // Use the 'BarChart2' icon or choose another like `Info`.
+    label: "About App",
+    color: "text-teal-500",
+  },
 ];
 
 export function Sidebar() {
@@ -80,7 +85,6 @@ export function Sidebar() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
 
   const toggleSidebar = () => {
     setIsCollapsed((prev) => !prev);
