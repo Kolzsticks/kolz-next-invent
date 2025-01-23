@@ -80,9 +80,9 @@ export default function DashboardPage() {
 
       {/* Period Selection - ShadCN UI Buttons */}
       <div className="flex space-x-4">
-        <Button variant={period === "day" ? "outline" : "default"} onClick={() => handlePeriodChange("day")}>Day</Button>
-        <Button variant={period === "month" ? "outline" : "default"} onClick={() => handlePeriodChange("month")}>Month</Button>
-        <Button variant={period === "year" ? "outline" : "default"} onClick={() => handlePeriodChange("year")}>Year</Button>
+        <Button variant={period === "day" ? "default" : "outline"} onClick={() => handlePeriodChange("day")}>Day</Button>
+        <Button variant={period === "month" ? "default" : "outline"} onClick={() => handlePeriodChange("month")}>Month</Button>
+        <Button variant={period === "year" ? "default" : "outline"} onClick={() => handlePeriodChange("year")}>Year</Button>
       </div>
 
       {/* Pass loading state and data directly to DashboardStats */}
