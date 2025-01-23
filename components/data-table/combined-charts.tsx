@@ -60,7 +60,7 @@ export function CombinedCharts({
         <CardContent>
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
-              <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
+              <Loader2 className="animate-spin h-8 w-8 " />
             </div>
           ) : (
             <ChartContainer config={salesConfig}>
@@ -122,7 +122,7 @@ export function CombinedCharts({
         <CardContent>
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
-              <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
+              <Loader2 className="animate-spin h-8 w-8 " />
             </div>
           ) : (
             <ChartContainer config={productConfig}>
