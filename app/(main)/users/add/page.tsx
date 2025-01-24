@@ -3,7 +3,6 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -26,9 +25,21 @@ import { toast } from "sonner";
 import { createUser } from "@/lib/actions";
 import { userSchema, type UserFormData } from "@/lib/zod";
 import { AlertCircle, Eye, EyeOff } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation"; // Import useRouter for redirect
+import AccessDenied from "@/components/AccessDenied";
 
 const UserRegistrationForm = () => {
   const [error, setError] = React.useState<string>("");
+  const { data: session } = useSession();
+  const router = useRouter(); // To handle redirect
+
+  // Redirect if not admin
+  if (session?.user?.role !== "admin") {
+    return (
+      <AccessDenied />
+    );
+  }
 
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -76,10 +87,7 @@ const UserRegistrationForm = () => {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-6"
-          >
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
             {error && (
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
@@ -121,10 +129,7 @@ const UserRegistrationForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Role</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select a role" />
@@ -133,7 +138,6 @@ const UserRegistrationForm = () => {
                     <SelectContent>
                       <SelectItem value="admin">Admin</SelectItem>
                       <SelectItem value="user">User</SelectItem>
-                      <SelectItem value="moderator">Moderator</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

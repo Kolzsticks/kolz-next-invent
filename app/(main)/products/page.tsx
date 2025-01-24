@@ -19,6 +19,10 @@ import { StatsCard } from "@/components/StatCard";
 import { formatCurrency } from "@/utils/functions";
 import { Skeleton } from "@/components/ui/skeleton";
 import { productColumns } from "@/lib/column-data";
+import { createDeleteHandler } from "@/components/CreateDeleteHandler";
+
+import { deleteProduct } from "@/lib/actions";
+import { Product } from "@/types/types";
 
 export default function ProductsPage() {
   const {
@@ -30,8 +34,20 @@ export default function ProductsPage() {
     fetchAllProducts,
     fetchProductsByDate,
     clearFilter,
+    removeProducts,
   } = useProductsStore();
   const [calendarOpen, setCalendarOpen] = useState(false);
+
+  // Create delete handler
+  const handleDeleteProducts = createDeleteHandler<Product>(
+    deleteProduct,
+    "Products deleted successfully",
+    "Failed to delete some products",
+    (deletedProducts) => {
+      // Update local store after successful deletion
+      removeProducts(deletedProducts);
+    }
+  );
 
   const handleDateSelect = (newDate: Date | undefined) => {
     setCalendarOpen(false);
@@ -126,6 +142,7 @@ export default function ProductsPage() {
               data={products}
               filterColumn="name"
               filterPlaceholder="Filter products..."
+              onDelete={handleDeleteProducts}
             />
           </CardContent>
         </Card>

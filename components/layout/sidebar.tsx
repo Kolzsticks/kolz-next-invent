@@ -7,10 +7,10 @@ import {
   Layers,
   Cloud,
   Users,
-  BarChart2,
   Menu,
   ChevronDown,
   ChevronRight,
+  Info,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -65,7 +65,7 @@ const sidebarLinks = [
   },
   {
     href: "/about-app",
-    icon: BarChart2, // Use the 'BarChart2' icon or choose another like `Info`.
+    icon: Info, // Use the 'BarChart2' icon or choose another like `Info`.
     label: "About App",
     color: "text-teal-500",
   },

@@ -1,9 +1,11 @@
+import { SalePageType } from "@/lib/zod";
 import { ColumnDef } from "@tanstack/react-table";
 
 
 export interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
   data: TData[];
+  onDelete?: (selectedRows: TData[]) => void | Promise<void>;
   filterColumn?: string;
   filterPlaceholder?: string;
 }
@@ -149,3 +151,32 @@ export interface TrendResult {
 }
 
 export type Period = 'day' | 'week' | 'month' | 'year';
+
+
+export interface SalesState {
+  sales: SalePageType[];
+  loading: boolean;
+  error: string | null;
+  date: Date | undefined;
+  totalSales: number;
+  totalItems: number;
+  averageSale: number;
+  fetchAllSales: () => Promise<void>;
+  fetchSalesByDate: (date: Date) => Promise<void>;
+  clearFilter: () => void;
+  removeSales: (deletedSales: Sales[]) => void;
+}
+
+
+export interface ProductsStore {
+  products: Product[];
+  loading: boolean;
+  error: string | null;
+  date: Date | undefined;
+  totalValue: number;
+  fetchAllProducts: () => Promise<void>;
+  fetchProductsByDate: (selectedDate: Date) => Promise<void>;
+  clearFilter: () => void;
+  handleDeleteSuccess: (deletedId: number) => void;
+  removeProducts: (deletedProducts: Product[]) => void; // Add this line
+}

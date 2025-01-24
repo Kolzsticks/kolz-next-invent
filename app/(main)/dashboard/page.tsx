@@ -6,7 +6,6 @@ import { DashboardData } from "@/types/types";
 import { DashboardStats } from "@/components/DashboardStats";
 import { CombinedCharts } from "@/components/data-table/combined-charts";
 import CookieChecker from "@/components/CheckCookie";
-import { Button } from "@/components/ui/button"; // ShadCN UI Button
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
@@ -22,7 +21,7 @@ export default function DashboardPage() {
     null
   );
   const [isLoading, setIsLoading] = useState(true);
-  const [period, setPeriod] = useState("month"); // Add state for period
+  const [period, setPeriod] = useState("day"); // Add state for period
 
   // Fetch data based on selected period
   useEffect(() => {

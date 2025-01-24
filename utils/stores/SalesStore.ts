@@ -1,20 +1,8 @@
 import { create } from 'zustand'
 import { getAllSales } from "@/lib/actions";
 import { format } from "date-fns";
-import { SalePageType } from "@/lib/zod";
+import { Product, Sales, SalesState } from '@/types/types';
 
-interface SalesState {
-  sales: SalePageType[];
-  loading: boolean;
-  error: string | null;
-  date: Date | undefined;
-  totalSales: number;
-  totalItems: number;
-  averageSale: number;
-  fetchAllSales: () => Promise<void>;
-  fetchSalesByDate: (date: Date) => Promise<void>;
-  clearFilter: () => void;
-}
 
 export const useSalesStore = create<SalesState>((set, get) => ({
   sales: [],
@@ -40,9 +28,9 @@ export const useSalesStore = create<SalesState>((set, get) => ({
         averageSale:
           salesData.length > 0
             ? salesData.reduce(
-                (acc, sale) => acc + Number(sale.price) * sale.quantity,
-                0
-              ) / salesData.length
+              (acc, sale) => acc + Number(sale.price) * sale.quantity,
+              0
+            ) / salesData.length
             : 0,
       });
     } catch (err) {
@@ -71,9 +59,9 @@ export const useSalesStore = create<SalesState>((set, get) => ({
         averageSale:
           salesData.length > 0
             ? salesData.reduce(
-                (acc, sale) => acc + Number(sale.price) * sale.quantity,
-                0
-              ) / salesData.length
+              (acc, sale) => acc + Number(sale.price) * sale.quantity,
+              0
+            ) / salesData.length
             : 0,
       });
     } catch (err) {
@@ -88,5 +76,39 @@ export const useSalesStore = create<SalesState>((set, get) => ({
   clearFilter: () => {
     set({ date: undefined });
     get().fetchAllSales();
+  },
+
+  // Add this new method
+  removeSales: (deletedSales: Sales[]) => {
+    set((state) => {
+      const updatedSales = state.sales.filter(
+        (sale) => !deletedSales.some((deleted) => deleted.id === sale.id)
+      );
+
+      const totalSales = updatedSales.reduce(
+        (acc, sale) => acc + Number(sale.price) * sale.quantity,
+        0
+      );
+
+      const totalItems = updatedSales.reduce(
+        (acc, sale) => acc + sale.quantity,
+        0
+      );
+
+      const averageSale =
+        updatedSales.length > 0
+          ? updatedSales.reduce(
+            (acc, sale) => acc + Number(sale.price) * sale.quantity,
+            0
+          ) / updatedSales.length
+          : 0;
+
+      return {
+        sales: updatedSales,
+        totalSales,
+        totalItems,
+        averageSale,
+      };
+    });
   },
 }));

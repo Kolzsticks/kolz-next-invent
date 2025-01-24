@@ -1,20 +1,9 @@
 // stores/productsStore.ts
 import { create } from "zustand";
 import { format } from "date-fns";
-import { Product } from "@/types/types";
+import { Product, ProductsStore } from "@/types/types";
 import { getAllProducts } from "@/lib/actions";
 
-interface ProductsStore {
-  products: Product[];
-  loading: boolean;
-  error: string | null;
-  date: Date | undefined;
-  totalValue: number;
-  fetchAllProducts: () => Promise<void>;
-  fetchProductsByDate: (selectedDate: Date) => Promise<void>;
-  clearFilter: () => void;
-  handleDeleteSuccess: (deletedId: number) => void;
-}
 
 export const useProductsStore = create<ProductsStore>((set, get) => ({
   products: [],
@@ -75,6 +64,25 @@ export const useProductsStore = create<ProductsStore>((set, get) => ({
         0
       );
       return { products: updatedProducts, totalValue };
+    });
+  },
+
+  // Add this new method
+  removeProducts: (deletedProducts: Product[]) => {
+    set((state) => {
+      const updatedProducts = state.products.filter(
+        product => !deletedProducts.some(deleted => deleted.id === product.id)
+      );
+
+      const totalValue = updatedProducts.reduce(
+        (acc, product) => acc + product.price * product.quantity,
+        0
+      );
+
+      return {
+        products: updatedProducts,
+        totalValue
+      };
     });
   },
 }));

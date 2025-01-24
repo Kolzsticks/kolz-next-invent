@@ -19,6 +19,9 @@ import { useSalesStore } from "@/utils/stores/SalesStore";
 import { ErrorDisplay } from "@/components/ErrorDisplay";
 import { StatsCard } from "@/components/StatCard";
 import { formatCurrency } from "@/utils/functions";
+import { createDeleteHandler } from "@/components/CreateDeleteHandler";
+import { Sales } from "@/types/types";
+import { deleteSale } from "@/lib/actions";
 
 export default function SalesPage() {
   const {
@@ -32,8 +35,20 @@ export default function SalesPage() {
     fetchAllSales,
     fetchSalesByDate,
     clearFilter,
+    removeSales,
   } = useSalesStore();
   const [calendarOpen, setCalendarOpen] = useState(false);
+
+  // Create delete handler
+  const handleDeleteSales = createDeleteHandler<Sales>(
+    deleteSale,
+    "Sales deleted successfully",
+    "Failed to delete some sales",
+    (deleteSale) => {
+      // Update local store after successful deletion
+      removeSales(deleteSale);
+    }
+  );
 
   // Fetch all sales on component mount
   useEffect(() => {
@@ -141,6 +156,7 @@ export default function SalesPage() {
               }))}
               filterColumn="productName"
               filterPlaceholder="Filter sales..."
+              onDelete={handleDeleteSales}
             />
           </CardContent>
         </Card>
