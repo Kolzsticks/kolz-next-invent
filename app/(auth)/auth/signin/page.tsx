@@ -16,7 +16,7 @@ import { z } from "zod";
 import { signInSchema } from "@/lib/zod";
 import LoadingButton from "@/components/loading-button";
 import ErrorMessage from "@/components/error-message";
-import { Package } from "lucide-react";
+import { Package, Eye, EyeOff } from "lucide-react"; // Import Eye and EyeOff icons
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -25,6 +25,7 @@ export default function SignIn() {
   const router = useRouter();
   const [globalError, setGlobalError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
 
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -45,8 +46,6 @@ export default function SignIn() {
         redirect: false,
       });
 
-      // console.log("SignIn response:", response); // Debug log
-
       if (response?.error) {
         setGlobalError(
           response.error === "CredentialsSignin"
@@ -61,7 +60,7 @@ export default function SignIn() {
         router.refresh();
       }
     } catch (error) {
-      console.error("SignIn error:", error); // Debug log
+      console.error("SignIn error:", error);
       setGlobalError("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
@@ -108,13 +107,26 @@ export default function SignIn() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Enter password"
-                        disabled={isLoading}
-                        {...field}
-                      />
+                    <FormControl className="relative">
+                      <div className="flex items-center">
+                        <Input
+                          type={showPassword ? "text" : "password"} // Toggle the password visibility
+                          placeholder="Enter password"
+                          disabled={isLoading}
+                          {...field}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)} // Toggle the showPassword state
+                          className="ml-2 text-gray-400 hover:text-gray-600"
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-5 w-5" />
+                          ) : (
+                            <Eye className="h-5 w-5" />
+                          )}
+                        </button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
