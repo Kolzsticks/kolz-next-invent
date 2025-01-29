@@ -9,21 +9,13 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
 import ImageDropdown from "@/components/image_submission/DeleteImg"; // Import the Dropdown component
+import { CloudinaryResource } from "@/types/types";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-
-interface CloudinaryResource {
-  context?: {
-    alt?: string;
-    caption?: string;
-  };
-  public_id: string;
-  secure_url: string;
-}
 
 async function Home() {
   const { resources: products_image } = await cloudinary.api.resources_by_tag(
@@ -105,7 +97,10 @@ async function Home() {
                 {product_image.context.caption}
               </p>
             )}
-            <ImageDropdown publicId={product_image.public_id} onDelete={deleteImage} />
+            <ImageDropdown
+              publicId={product_image.public_id}
+              onDelete={deleteImage}
+            />
           </Card>
         ))}
       </div>

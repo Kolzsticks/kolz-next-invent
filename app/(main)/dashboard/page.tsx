@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { DashboardData } from "@/types/types";
 import { DashboardStats } from "@/components/DashboardStats";
 import { CombinedCharts } from "@/components/data-table/combined-charts";
-import CookieChecker from "@/components/CheckCookie";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
@@ -108,7 +107,6 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <CookieChecker />
 
       {/* Pass loading state and data directly to DashboardStats */}
       <DashboardStats

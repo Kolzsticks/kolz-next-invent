@@ -2,6 +2,7 @@ import "./globals.css";
 import CookiesProviderLayout from "@/components/CookiesProvider";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "@/components/theme-provider";
+import CookieChecker from "@/components/CheckCookie";
 
 
 export default function RootLayout({
@@ -20,6 +21,7 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
+              <CookieChecker />
               {children}
             </ThemeProvider>
           </body>

@@ -1,6 +1,6 @@
 'use server'
 
-import { CreateUserInput, Product, RealUser, UpdateProductData } from "@/types/types";
+import type { CreateUserInput, Product, RealUser, Sales, UpdateProductData, updateSaleData, } from "@/types/types";
 // lib/actions.ts
 import { db } from "./db";
 import { Prisma } from "@prisma/client";
@@ -200,6 +200,28 @@ export async function updateProduct(id: number, data: UpdateProductData) {
   // Serialize the response
   return JSON.parse(JSON.stringify(updatedProduct));
 }
+
+export async function updateSale(id: number, data: updateSaleData) {
+  // Destructure product_id and create formattedData without it
+  const { product_id, ...restData } = data;
+
+  const formattedData: Prisma.SalesUpdateInput = {
+    ...restData,
+    price: new Prisma.Decimal(data.price),
+    quantity: data.quantity,
+    product: {
+      connect: { id: product_id }
+    }
+  };
+
+  const updatedSales = await db.sales.update({
+    where: { id },
+    data: formattedData,
+  });
+
+  return JSON.parse(JSON.stringify(updatedSales));
+}
+
 
 export async function deleteProduct(id: number) {
   try {

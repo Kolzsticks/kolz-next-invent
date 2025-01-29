@@ -1,6 +1,7 @@
-import type { NextAuthConfig } from "next-auth";
+
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+
 
 
 async function login(credentials: any) {
@@ -32,7 +33,9 @@ async function login(credentials: any) {
     throw new Error(e instanceof Error ? e.message : "Something went wrong.");
   }
 }
-export const config: NextAuthConfig = {
+export const {
+  auth, handlers, signIn, signOut
+} = NextAuth({
   pages: { signIn: "/auth/signin" },
   providers: [
     CredentialsProvider({
@@ -83,6 +86,6 @@ export const config: NextAuthConfig = {
   // session:{
   //   maxAge: 60
   // }
-};
+});
 
-export const { handlers, auth, signIn, signOut } = NextAuth(config);
+// export const { handlers, auth, signIn, signOut } = NextAuth(config);

@@ -31,10 +31,36 @@ export interface Sales {
 }
 
 
+export interface EditSaleType {
+  id: number;
+  product_id: number;
+  price: number;
+  quantity: number;
+  date: string;
+  product: {
+    id: number;
+    name: string;
+    subcategory: string | null;
+    venue: string | null;
+    image_url: string | null;
+    price: number;
+    // Add other product fields as needed
+  };
+}
+export interface CloudinaryResource {
+  context?: {
+    alt?: string;
+    caption?: string;
+  };
+  public_id: string;
+  secure_url: string;
+}
+
+
 export // Omit 'id' and 'date' since they shouldn't be updated
   type UpdateProductData = Omit<Product, 'id' | 'date'>;
 
-
+export type updateSaleData = Omit<Sales, 'id' | 'date'>;
 
 // types.ts
 export interface UserCredentials {
