@@ -1,50 +1,50 @@
 -- Insert Products
 INSERT INTO "Product" (name, category, subcategory, price, venue, quantity, image_url, date) VALUES
 -- Beverages - Beer
-('HEINEKEN', 'Beverages', 'Beer', 2000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('BIG WILLIAMS', 'Beverages', 'Beer', 2000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('DESPERADO', 'Beverages', 'Beer', 1700, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('GOLDBERG', 'Beverages', 'Beer', 1700, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('STOUT', 'Beverages', 'Beer', 1700, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('GULDER', 'Beverages', 'Beer', 1700, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('HERO', 'Beverages', 'Beer', 1700, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('ICE', 'Beverages', 'Beer', 1200, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('STAR RADLER', 'Beverages', 'Beer', 1000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('SMALL WILLIAM', 'Beverages', 'Beer', 1000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('33 BEER', 'Beverages', 'Beer', 1700, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
+('HEINEKEN', 'Beverages', 'Beer', 2000, 'lounge', 0, '', NOW()),
+('BIG WILLIAMS', 'Beverages', 'Beer', 2000, 'lounge', 0, ' ', NOW()),
+('DESPERADO', 'Beverages', 'Beer', 1700, 'lounge', 0, ' ', NOW()),
+('GOLDBERG', 'Beverages', 'Beer', 1700, 'lounge', 0, ' ', NOW()),
+('STOUT', 'Beverages', 'Beer', 1700, 'lounge', 0, ' ', NOW()),
+('GULDER', 'Beverages', 'Beer', 1700, 'lounge', 0, ' ', NOW()),
+('HERO', 'Beverages', 'Beer', 1700, 'lounge', 0, ' ', NOW()),
+('ICE', 'Beverages', 'Beer', 1200, 'lounge', 0, ' ', NOW()),
+('STAR RADLER', 'Beverages', 'Beer', 1000, 'lounge', 0, ' ', NOW()),
+('SMALL WILLIAM', 'Beverages', 'Beer', 1000, 'lounge', 0, ' ', NOW()),
+('33 BEER', 'Beverages', 'Beer', 1700, 'lounge', 0, ' ', NOW()),
 
 -- Beverages - Soft Drinks
-('WATER 50cl', 'Beverages', 'Soft Drinks', 300, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('WATER 75cl', 'Beverages', 'Soft Drinks', 500, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('WATER regular', 'Beverages', 'Soft Drinks', 500, 'club', 0, '' '', CURRENT_TIMESTAMP),
-('BOTTLE MALT', 'Beverages', 'Soft Drinks', 1000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('CAN MALT', 'Beverages', 'Soft Drinks', 1000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('COKE', 'Beverages', 'Soft Drinks', 1000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('COKE (Club)', 'Beverages', 'Soft Drinks', 1500, 'club', 0, '' '', CURRENT_TIMESTAMP),
-('FEARLESS', 'Beverages', 'Soft Drinks', 1000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('PREDATOR', 'Beverages', 'Soft Drinks', 1000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('EXOTIC', 'Beverages', 'Soft Drinks', 3000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('EXOTIC (Club)', 'Beverages', 'Soft Drinks', 4000, 'club', 0, '' '', CURRENT_TIMESTAMP),
-('BLUE BULLET', 'Beverages', 'Soft Drinks', 2000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('BLUE BULLET (Club)', 'Beverages', 'Soft Drinks', 3000, 'club', 0, '' '', CURRENT_TIMESTAMP),
-('MONSTER', 'Beverages', 'Soft Drinks', 1500, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('MONSTER (Club)', 'Beverages', 'Soft Drinks', 3500, 'club', 0, '' '', CURRENT_TIMESTAMP),
-('VITAMILK', 'Beverages', 'Soft Drinks', 2500, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('HOLLANDIA', 'Beverages', 'Soft Drinks', 3000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('CLIMAX', 'Beverages', 'Soft Drinks', 2000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('BLACK BULLET', 'Beverages', 'Soft Drinks', 2500, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
+('WATER 50cl', 'Beverages', 'Soft Drinks', 300, 'lounge', 0, ' ', NOW()),
+('WATER 75cl', 'Beverages', 'Soft Drinks', 500, 'lounge', 0, ' ', NOW()),
+('WATER regular', 'Beverages', 'Soft Drinks', 500, 'club', 0, ' ', NOW()),
+('BOTTLE MALT', 'Beverages', 'Soft Drinks', 1000, 'lounge', 0, ' ', NOW()),
+('CAN MALT', 'Beverages', 'Soft Drinks', 1000, 'lounge', 0, ' ', NOW()),
+('COKE', 'Beverages', 'Soft Drinks', 1000, 'lounge', 0, ' ', NOW()),
+('COKE (Club)', 'Beverages', 'Soft Drinks', 1500, 'club', 0, ' ', NOW()),
+('FEARLESS', 'Beverages', 'Soft Drinks', 1000, 'lounge', 0, ' ', NOW()),
+('PREDATOR', 'Beverages', 'Soft Drinks', 1000, 'lounge', 0, ' ', NOW()),
+('EXOTIC', 'Beverages', 'Soft Drinks', 3000, 'lounge', 0, ' ', NOW()),
+('EXOTIC (Club)', 'Beverages', 'Soft Drinks', 4000, 'club', 0, ' ', NOW()),
+('BLUE BULLET', 'Beverages', 'Soft Drinks', 2000, 'lounge', 0, ' ', NOW()),
+('BLUE BULLET (Club)', 'Beverages', 'Soft Drinks', 3000, 'club', 0, ' ', NOW()),
+('MONSTER', 'Beverages', 'Soft Drinks', 1500, 'lounge', 0, ' ', NOW()),
+('MONSTER (Club)', 'Beverages', 'Soft Drinks', 3500, 'club', 0, ' ', NOW()),
+('VITAMILK', 'Beverages', 'Soft Drinks', 2500, 'lounge', 0, ' ', NOW()),
+('HOLLANDIA', 'Beverages', 'Soft Drinks', 3000, 'lounge', 0, ' ', NOW()),
+('CLIMAX', 'Beverages', 'Soft Drinks', 2000, 'lounge', 0, ' ', NOW()),
+('BLACK BULLET', 'Beverages', 'Soft Drinks', 2500, 'lounge', 0, ' ', NOW()),
 
 -- Beverages - Juice Drinks
-('PINEAPPLE', 'Beverages', 'Juice Drinks', 2000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('WATERMELON', 'Beverages', 'Juice Drinks', 2000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('PAWPAW', 'Beverages', 'Juice Drinks', 2000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('COCONUT DATE/TIGER FRUIT', 'Beverages', 'Juice Drinks', 2000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('FRIUTE SALAD & SAUCE', 'Beverages', 'Juice Drinks', 2000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('COCONUT MILK DRINK', 'Beverages', 'Juice Drinks', 2000, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
-('PALM WINE', 'Beverages', 'Juice Drinks', 3500, 'lounge', 0, '' '', CURRENT_TIMESTAMP),
+('PINEAPPLE', 'Beverages', 'Juice Drinks', 2000, 'lounge', 0, ' ', NOW()),
+('WATERMELON', 'Beverages', 'Juice Drinks', 2000, 'lounge', 0, ' ', NOW()),
+('PAWPAW', 'Beverages', 'Juice Drinks', 2000, 'lounge', 0, ' ', NOW()),
+('COCONUT DATE/TIGER FRUIT', 'Beverages', 'Juice Drinks', 2000, 'lounge', 0, ' ', NOW()),
+('FRIUTE SALAD & SAUCE', 'Beverages', 'Juice Drinks', 2000, 'lounge', 0, ' ', NOW()),
+('COCONUT MILK DRINK', 'Beverages', 'Juice Drinks', 2000, 'lounge', 0, ' ', NOW()),
+('PALM WINE', 'Beverages', 'Juice Drinks', 3500, 'lounge', 0, ' ', NOW()),
 
 -- Insert Products for Cognac
-INSERT INTO Product (name, category, subcategory, price, venue, quantity, image_url, date)
+INSERT INTO "Product" (name, category, subcategory, price, venue, quantity, image_url, date)
 VALUES
 ('REMY MARTIN XO', 'Spirits', 'Cognac', 250000, 'club', 0, '', NOW()),
 ('REMY MARTIN VSOP', 'Spirits', 'Cognac', 100000, 'club', 0, '', NOW()),
@@ -58,7 +58,7 @@ VALUES
 ('MARTEL BLUE SWIFT', 'Spirits', 'Cognac', 100000, 'club', 0, '', NOW());
 
 -- Insert Products for Whiskey
-INSERT INTO Product (name, category, subcategory, price, venue, quantity, image_url, date)
+INSERT INTO "Product" (name, category, subcategory, price, venue, quantity, image_url, date)
 VALUES
 ('GOLD LABEL', 'Spirits', 'Whiskey', 75000, 'club', 0, '', NOW()),
 ('BLACK LABEL', 'Spirits', 'Whiskey', 35000, 'lounge', 0, '', NOW()),
@@ -74,7 +74,7 @@ VALUES
 ('ST. REMY VSOP', 'Spirits', 'Whiskey', 20000, 'lounge', 0, '', NOW());
 
 -- Insert Products for Vodka & Gin
-INSERT INTO Product (name, category, subcategory, price, venue, quantity, image_url, date)
+INSERT INTO "Product" (name, category, subcategory, price, venue, quantity, image_url, date)
 VALUES
 ('CIROC', 'Spirits', 'Vodka & Gin', 60000, 'lounge', 0, '', NOW()),
 ('CIROC', 'Spirits', 'Vodka & Gin', 80000, 'club', 0, '', NOW()),
@@ -84,7 +84,7 @@ VALUES
 ('SMALL GORDONS', 'Spirits', 'Vodka & Gin', 2500, 'lounge', 0, '', NOW());
 
 -- Insert Products for Tequila
-INSERT INTO Product (name, category, subcategory, price, venue, quantity, image_url, date)
+INSERT INTO "Product" (name, category, subcategory, price, venue, quantity, image_url, date)
 VALUES
 ('AZUL', 'Spirits', 'Tequila', 550000, 'club', 0, '', NOW()),
 ('OLMECA TEQUILA', 'Spirits', 'Tequila', 25000, 'lounge', 0, '', NOW()),

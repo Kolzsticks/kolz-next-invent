@@ -1,13 +1,13 @@
 'use server'
-
 import type { CreateUserInput, Product, RealUser, Sales, UpdateProductData, updateSaleData, } from "@/types/types";
 // lib/actions.ts
 import { db } from "./db";
 import { Prisma } from "@prisma/client";
-import { revalidateTag } from "next/cache";
 import moment from "moment"; // Correct way to import moment
 import { EditUserInput, SalePageType } from "./zod";
 import { hash } from 'bcryptjs';
+
+
 
 
 export async function createProduct(productData: UpdateProductData) {
@@ -59,7 +59,6 @@ export async function deleteUser(id: number) {
     await db.user.delete({
       where: { id }
     });
-    // revalidatePath('/users');
     return { success: true };
   } catch (error) {
     console.error("Error deleting user:", error);
@@ -94,6 +93,7 @@ export async function getUser(id: number) {
 
   return user;
 }
+
 
 export const getAllSales = async (date?: string): Promise<SalePageType[]> => {
   try {

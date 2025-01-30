@@ -1,41 +1,30 @@
-"use client";
-
 import { DataTable } from "@/components/data-table/data-table";
-import { createColumns } from "@/components/data-table/columns";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { CategoryColumns } from "@/lib/column-data";
+import { getAllCategories, getAllProducts } from "@/lib/actions";
 
-const categories = [
-  {
-    id: "1",
-    name: "Electronics",
-    products: "150",
-    created: "2024-01-15",
-  },
-  // Add more sample categories...
-];
+export default async function CategoriesPage() {
+  const categories = await getAllCategories(); // ['Beverages', 'Champagne & Wine', ...]
+  const products = await getAllProducts(); // [{ id: "1", name: "Product 1", category: "Beverages" }, ...]
 
-const columns = createColumns({
-  columns: [
-    {
-      accessorKey: "name",
-      header: "Name",
-      cell: ({ row }) => row.original.name || "N/A",
-    },
-    {
-      accessorKey: "products",
-      header: "Products",
-      cell: ({ row }) => row.original.products || "N/A",
-    },
-    {
-      accessorKey: "created",
-      header: "Created Date",
-      cell: ({ row }) => row.original.created || "N/A",
-    },
-  ],
-});
+  // Group products by category and calculate counts
+  const categoryCounts = products.reduce((acc, product) => {
+    if (!acc[product.category]) {
+      acc[product.category] = 0;
+    }
+    acc[product.category]++;
+    return acc;
+  }, {} as Record<string, number>);
 
-export default function CategoriesPage() {
+  // Transform data for the table
+  const tableData = categories.map((name, index) => ({
+    id: (index + 1).toString(),
+    name,
+    products: categoryCounts[name] || 0, // Use the calculated count
+    created: new Date().toISOString().split("T")[0],
+  }));
+
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -44,7 +33,7 @@ export default function CategoriesPage() {
           <Plus className="mr-2 h-4 w-4" /> Add Category
         </Button>
       </div>
-      <DataTable columns={columns} data={categories} />
+      <DataTable columns={CategoryColumns} data={tableData} />
     </div>
   );
 }

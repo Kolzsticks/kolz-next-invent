@@ -114,3 +114,23 @@ export const userColumns: ColumnDef<RealUser>[] = createColumns({
   },
   editUrl: (id: number) => `/users/edit/${id}`,
 });
+
+export const CategoryColumns = createColumns({
+  columns: [
+    {
+      accessorKey: "name",
+      header: "Name",
+      cell: ({ row }) => row.original.name || "N/A",
+    },
+    {
+      accessorKey: "products",
+      header: "Products",
+      cell: ({ row }) => row.original.products.toString() || "0", // Ensure it's a string
+    },
+    {
+      accessorKey: "created",
+      header: "Created Date",
+      cell: ({ row }) => row.original.created || "N/A",
+    },
+  ],
+});
