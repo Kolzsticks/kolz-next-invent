@@ -41,7 +41,7 @@ INSERT INTO "Product" (name, category, subcategory, price, venue, quantity, imag
 ('COCONUT DATE/TIGER FRUIT', 'Beverages', 'Juice Drinks', 2000, 'lounge', 0, ' ', NOW()),
 ('FRIUTE SALAD & SAUCE', 'Beverages', 'Juice Drinks', 2000, 'lounge', 0, ' ', NOW()),
 ('COCONUT MILK DRINK', 'Beverages', 'Juice Drinks', 2000, 'lounge', 0, ' ', NOW()),
-('PALM WINE', 'Beverages', 'Juice Drinks', 3500, 'lounge', 0, ' ', NOW()),
+('PALM WINE', 'Beverages', 'Juice Drinks', 3500, 'lounge', 0, ' ', NOW());
 
 -- Insert Products for Cognac
 INSERT INTO "Product" (name, category, subcategory, price, venue, quantity, image_url, date)

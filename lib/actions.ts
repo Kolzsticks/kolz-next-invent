@@ -1,7 +1,7 @@
 'use server'
 import type { CreateUserInput, Product, RealUser, Sales, UpdateProductData, updateSaleData, } from "@/types/types";
 // lib/actions.ts
-import { db } from "./db";
+import db  from "./db";
 import { Prisma } from "@prisma/client";
 import moment from "moment"; // Correct way to import moment
 import { EditUserInput, SalePageType } from "./zod";
@@ -57,7 +57,7 @@ export async function createUser(user: CreateUserInput): Promise<RealUser> {
 export async function deleteUser(id: number) {
   try {
     await db.user.delete({
-      where: { id }
+      where: { id },
     });
     return { success: true };
   } catch (error) {
@@ -73,7 +73,8 @@ export async function getAllUsers(): Promise<RealUser[]> {
         id: true,
         username: true,
         role: true,
-      }
+      },
+      
     });
     return allUsers as RealUser[];  // Now the types match
   } catch (error) {
@@ -113,6 +114,7 @@ export const getAllSales = async (date?: string): Promise<SalePageType[]> => {
       orderBy: {
         date: 'desc', // Optional: Order by date descending
       },
+      
     });
 
     // Format sales and return
@@ -149,6 +151,7 @@ export async function getAllProducts(date?: string): Promise<Product[]> {
       orderBy: {
         date: 'desc',
       },
+      
     });
 
     // Format the products with a formatted date
@@ -177,6 +180,7 @@ export async function getAllCategories() {
         category: true,
       },
       distinct: ['category'],
+      
     });
 
     return categories.map((category) => category.category);

@@ -83,9 +83,9 @@ export const {
     },
   },
   debug: process.env.NODE_ENV === "development",
-  // session:{
-  //   maxAge: 60
-  // }
+  session:{
+    maxAge: 1800
+  }
 });
 
 // export const { handlers, auth, signIn, signOut } = NextAuth(config);

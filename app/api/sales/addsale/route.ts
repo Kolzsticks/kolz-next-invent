@@ -1,5 +1,5 @@
 // /app/api/sales/addSale.ts (Server-side action)
-import { db } from "@/lib/db";
+import  db  from '@/lib/db';
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {

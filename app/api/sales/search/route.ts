@@ -1,5 +1,5 @@
 // app/api/products/search/route.ts
-import { db } from "@/lib/db";
+import  db  from '@/lib/db';
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {

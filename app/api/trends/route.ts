@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
 import { Period, TrendData, TrendResult } from '@/types/types';
+import  db  from '@/lib/db';
 
 function calculateServerTrend({ currentValue, previousValue, timespan }: TrendData): TrendResult {
   if (!previousValue || previousValue === 0) {

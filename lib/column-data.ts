@@ -6,7 +6,7 @@ import { SalePageType } from "@/lib/zod";
 import {
   ColumnDef,
 } from "@tanstack/react-table";
-import { db } from "./db";
+import db  from "./db";
 import { useProductsStore } from "@/utils/stores/ProductStore";
 
 
