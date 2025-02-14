@@ -19,6 +19,7 @@ export interface Product {
   venue: string;
   quantity: number;
   date: string; // Date as a formatted string
+  image_url: string | null; // Optional property
 }
 
 

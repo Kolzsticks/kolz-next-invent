@@ -11,6 +11,17 @@ export const signInSchema = z.object({
 });
 
 
+// Update the schema to include image_url
+// const productSchema = z.object({
+//   name: z.string().min(1, "Product name is required"),
+//   price: z.string().min(1, "Price is required"),
+//   category: z.string().min(1, "Category is required"),
+//   subcategory: z.string().optional(),
+//   quantity: z.string().min(1, "Quantity is required"),
+//   venue: z.string().min(1, "Venue is required"),
+//   image_url: z.string().optional(),
+// });
+
 export const productSchema = z.object({
   name: z.string().min(1, { message: "Product name is required" }),
   category: z.string().min(1, { message: "Category is required" }),
@@ -24,7 +35,11 @@ export const productSchema = z.object({
     .min(1, { message: "Quantity is required" })
     .transform((val) => parseInt(val)), // Convert string to integer
   venue: z.string().min(1, { message: "Venue is required" }),
+  image_url: z.string().optional(),
 });
+
+
+export type ProductFormValues = z.input<typeof productSchema>;
 
 
 export const saleSchema = z.object({

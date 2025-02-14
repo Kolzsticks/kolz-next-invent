@@ -20,35 +20,46 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "sonner"; // Importing toast for success alert
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { toast } from "sonner";
 import Link from "next/link";
-import { productSchema } from "@/lib/zod";
+import Image from "next/image";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { CloudinaryResource } from "@/types/types";
+import { productSchema,  ProductFormValues } from "@/lib/zod";
 
 
 
 
+interface ProductFormProps {
+  cloudinaryImages: CloudinaryResource[];
+}
 
+export function ProductForm({ cloudinaryImages }: ProductFormProps) {
+  const [loading, setLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<CloudinaryResource | null>(
+    null
+  );
 
-
-// Extracting the inferred type after transformation
-type ProductFormValues = z.input<typeof productSchema>;
-
-export function ProductForm() {
-  const [loading, setLoading] = useState(false); // Loading state
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
     defaultValues: {
       name: "",
-      price: "0", // Default as string to match schema input
+      price: "0",
       category: "",
       subcategory: "",
-      quantity: "0", // Default as string to match schema input
+      quantity: "0",
       venue: "",
+      image_url: "",
     },
   });
 
   async function onSubmit(values: z.input<typeof productSchema>) {
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
       const response = await fetch("/api/products", {
         method: "POST",
@@ -59,18 +70,11 @@ export function ProductForm() {
       });
 
       if (response.ok) {
-        toast.success(
-          <div>
-            Product added successfully.{" "}
-            <Link prefetch={true} href="/products" className="text-blue-500 underline">
-              View Products
-            </Link>
-          </div>
-        );
-        
-        form.reset(); // Reset the form on success
+        toast.success("Product added successfully");
+        form.reset();
+        setSelectedImage(null);
       } else {
-        const errorData = await response.json(); // Try to get error details from the server
+        const errorData = await response.json();
         toast.error(
           errorData?.message || "Failed to add product. Please try again."
         );
@@ -79,7 +83,7 @@ export function ProductForm() {
       console.error("Error:", err);
       toast.error("Something went wrong. Please try again.");
     } finally {
-      setLoading(false); // End loading
+      setLoading(false);
     }
   }
 
@@ -182,6 +186,7 @@ export function ProductForm() {
             )}
           />
         </div>
+
         <div className="grid grid-cols-2 gap-4">
           {/* Quantity Field */}
           <FormField
@@ -224,6 +229,74 @@ export function ProductForm() {
             )}
           />
         </div>
+
+        {/* Image Selection Field */}
+        <FormField
+          control={form.control}
+          name="image_url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Product Image</FormLabel>
+              <FormControl>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start text-left font-normal"
+                    >
+                      {selectedImage ? (
+                        <div className="flex items-center gap-2">
+                          <div className="h-8 w-8 relative">
+                            <Image
+                              src={selectedImage.secure_url}
+                              alt="Selected product image"
+                              width={32}
+                              height={32}
+                              className="object-cover rounded"
+                            />
+                          </div>
+                          <span>Selected Image</span>
+                        </div>
+                      ) : (
+                        "Select an image"
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80 p-0">
+                    <ScrollArea className="h-72">
+                      <div className="grid grid-cols-2 gap-2 p-4">
+                        {cloudinaryImages.map((image) => (
+                          <div
+                            key={image.public_id}
+                            className={`cursor-pointer rounded-md overflow-hidden border-2 ${
+                              selectedImage?.public_id === image.public_id
+                                ? "border-primary"
+                                : "border-transparent"
+                            }`}
+                            onClick={() => {
+                              field.onChange(image.secure_url);
+                              setSelectedImage(image);
+                            }}
+                          >
+                            <div className="relative aspect-square">
+                              <Image
+                                src={image.secure_url}
+                                alt={image.context?.alt || ""}
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </PopoverContent>
+                </Popover>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* Submit Button */}
         <Button type="submit" disabled={loading}>

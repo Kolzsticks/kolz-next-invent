@@ -17,7 +17,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-async function Home() {
+async function CloudinaryImages() {
   const { resources: products_image } = await cloudinary.api.resources_by_tag(
     "nextjs-server-actions-upload-sneakers",
     { context: true }
@@ -108,4 +108,4 @@ async function Home() {
   );
 }
 
-export default Home;
+export default CloudinaryImages;

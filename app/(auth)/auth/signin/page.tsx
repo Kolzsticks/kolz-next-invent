@@ -20,6 +20,9 @@ import { Package, Eye, EyeOff } from "lucide-react"; // Import Eye and EyeOff ic
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
+
+
 
 export default function SignIn() {
   const router = useRouter();
@@ -56,6 +59,7 @@ export default function SignIn() {
       }
 
       if (response?.ok) {
+        toast.success("You have successfully signed in.");
         router.push("/dashboard");
         router.refresh();
       }

@@ -1,5 +1,5 @@
 "use client";
-
+import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,13 +11,22 @@ import { Trash2 } from "lucide-react";
 
 interface ImageDropdownProps {
   publicId: string;
-  onDelete: (publicId: string) => void;
+  onDelete: (publicId: string) => Promise<void> | void;
 }
 
 const ImageDropdown: React.FC<ImageDropdownProps> = ({
   publicId,
   onDelete,
 }) => {
+  const handleDelete = async () => {
+    try {
+      await onDelete(publicId);
+      toast.success("Image deleted successfully!");
+    } catch (error) {
+      toast.error("Failed to delete image.");
+    }
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -27,7 +36,7 @@ const ImageDropdown: React.FC<ImageDropdownProps> = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem
-          onClick={() => onDelete(publicId)}
+          onClick={handleDelete}
           className="text-red-500 flex items-center"
         >
           <Trash2 className="mr-2 h-4 w-4" />

@@ -14,6 +14,7 @@ import {
 import { ModeToggle } from "./theme-toggle";
 import { Package } from "lucide-react"; // Example icon (you can replace it)
 import { handleSignOut } from "@/app/actions/authActions";
+import { toast } from "sonner";
 
 // Updated handleLogout function
 const handleLogout = async (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -21,6 +22,7 @@ const handleLogout = async (event: React.MouseEvent<HTMLAnchorElement>) => {
   try {
     // Redirect to home page after signing out
     await handleSignOut();
+    toast.success("Logged out successfully");
   } catch (error) {
     console.error("Logout failed", error);
   }

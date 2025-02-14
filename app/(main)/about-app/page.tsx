@@ -4,33 +4,49 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Github, Linkedin } from "lucide-react";
+import { siNextdotjs, siPostman, siPrisma, siVercel, siReact, siShadcnui, siTailwindcss, siPostgresql, siGithub } from "simple-icons";
 
 export default function AboutApp() {
   const technologies = [
     {
       name: "Next.js",
       description: "A React framework for production, enabling server and client components.",
-      icon: <img src="/nextjs-icon.svg" alt="Next.js" className="w-8 h-8" />,
+      icon: <div
+      style={{ fill: `#000000` }}
+      dangerouslySetInnerHTML={{ __html: siNextdotjs.svg }}
+    />,
     },
     {
       name: "Prisma",
       description: "A modern database toolkit to simplify working with databases.",
-      icon: <img src="/prisma-icon.svg" alt="Prisma" className="w-8 h-8" />,
+      icon: <div
+      style={{ fill: `#2D3748` }}
+      dangerouslySetInnerHTML={{ __html: siPrisma.svg }}
+    />,
     },
     {
       name: "PostgreSQL",
       description: "A powerful, open-source relational database.",
-      icon: <img src="/postgresql-icon.svg" alt="PostgreSQL" className="w-8 h-8" />,
+      icon: <div
+      style={{ fill: "#4169E1" }}
+      dangerouslySetInnerHTML={{ __html: siPostgresql.svg }}
+    />,
     },
     {
       name: "ShadCN UI",
       description: "Accessible components built with Radix UI and styled with Tailwind CSS.",
-      icon: <img src="/shadcn-icon.svg" alt="ShadCN UI" className="w-8 h-8" />,
+      icon: <div
+      className="bg-black p-2 rounded-sm fill-white"
+      dangerouslySetInnerHTML={{ __html: siShadcnui.svg }}
+    />,
     },
     {
       name: "Tailwind CSS",
       description: "A utility-first CSS framework for designing directly in markup.",
-      icon: <img src="/tailwind-icon.svg" alt="Tailwind CSS" className="w-8 h-8" />,
+      icon: <div
+      style={{ fill: `#06B6D4` }}
+      dangerouslySetInnerHTML={{ __html: siTailwindcss.svg }}
+    />,
     },
   ];
 
@@ -53,7 +69,7 @@ export default function AboutApp() {
           {technologies.map((tech) => (
             <Card key={tech.name} className="hover:shadow-lg transition-shadow">
               <CardHeader className="flex items-center space-x-4">
-                <div>{tech.icon}</div>
+                <div className="w-8 h-8">{tech.icon}</div>
                 <div>
                   <CardTitle>{tech.name}</CardTitle>
                   <CardDescription>{tech.description}</CardDescription>
@@ -117,7 +133,12 @@ export default function AboutApp() {
                   rel="noopener noreferrer"
                   className="flex items-center space-x-2"
                 >
-                  <Github className="w-4 h-4" />
+                  
+                  <div
+          style={{ fill: `#F05032` }}
+          className="w-5 h-5"
+          dangerouslySetInnerHTML={{ __html: siGithub.svg }}
+        />
                   <span>GitHub</span>
                 </a>
               </Badge>
