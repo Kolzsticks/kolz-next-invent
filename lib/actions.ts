@@ -164,6 +164,7 @@ export async function getAllProducts(date?: string): Promise<Product[]> {
       venue: product.venue ?? "Unknown",
       quantity: product.quantity,
       date: moment(product.date).format("MMMM D, YYYY h:mm A"),
+      image_url: product.image_url ?? null,
     }));
 
     return formattedProducts;

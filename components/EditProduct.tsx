@@ -41,6 +41,7 @@ export function ProductForm({ product }: { product: Product }) {
         price: parseFloat(price as string),
         venue: formData.get("venue") as string || "",
         quantity: parseInt(quantity as string),
+        image_url: product.image_url || null,
       };
   
       if (isNaN(updatedProduct.price) || isNaN(updatedProduct.quantity)) {
