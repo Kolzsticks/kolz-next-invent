@@ -41,3 +41,60 @@ Ensure you have the following installed on your local machine:
    ```bash
    git clone [https://github.com/Kolzsticks/kolz-next-invent.git](https://github.com/Kolzsticks/kolz-next-invent.git)
    cd kolz-next-invent
+
+```
+
+2. **Install dependencies:**
+```bash
+pnpm install
+
+```
+
+
+3. **Set up Environment Variables:**
+Create a `.env` file in the root directory and add the following keys:
+```env
+# Database Configuration
+DATABASE_URL="your_database_connection_string"
+
+# NextAuth Configuration
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="generate_a_random_secret_string"
+
+# Cloudinary Configuration
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="your_cloud_name"
+CLOUDINARY_API_KEY="your_api_key"
+CLOUDINARY_API_SECRET="your_api_secret"
+
+```
+
+
+4. **Initialize the Database:**
+Run the Prisma migrations to generate the schema in your database.
+```bash
+npx prisma migrate dev
+npx prisma generate
+
+```
+
+
+5. **Run the Development Server:**
+```bash
+pnpm dev
+
+```
+
+
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://www.google.com/search?q=https://github.com/Kolzsticks/kolz-next-invent/issues) if you want to contribute.
+
+## 📝 License
+
+This project is open-source and available under the [MIT License](https://www.google.com/search?q=LICENSE).
+
+```
+
+```
